@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<title>Candy Blast</title>
+<title>Candy Blast</title> 
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#a855f7"> 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#ff7eb3,#7b61ff);min-height:100vh;color:#fff;display:flex;justify-content:center;align-items:center;overflow:hidden}
@@ -110,6 +112,7 @@ function update(){
 function message(t){document.getElementById("msg").textContent=t}
 function wait(ms){return new Promise(r=>setTimeout(r,ms))}
 newGame();
-</script>
+</script> 
+ <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}</script>
 </body>
 </html>
