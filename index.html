@@ -1,134 +1,24 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Candy Blast - 100 Levels</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700;800&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Fredoka',sans-serif;touch-action:none}
-body{background:#87d6ff;overflow:hidden}
-#mapScreen{height:100vh;overflow-y:auto;scroll-behavior:smooth}
-.map{position:relative;width:100%;max-width:480px;margin:auto;height:4200px;background:url(./map100.jpg) no-repeat top center;background-size:100% 100%;background-color:#7ec8ff}
-.levelDot{position:absolute;width:54px;height:54px;border-radius:50%;border:4px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;box-shadow:0 6px 0 rgba(0,0,0,.35),0 10px 20px rgba(0,0,0,.4);cursor:pointer;transform:perspective(400px) rotateX(20deg);transition:.2s}
-.levelDot.ok{background:radial-gradient(circle at 30% 30%,#fff,#ff3d8a 50%,#c0003a);animation:float 2s infinite alternate}
-.levelDot.lock{background:radial-gradient(#bbb,#555);filter:grayscale(.6)}
-.levelDot.cur{animation:pop 0.7s infinite alternate;z-index:10;box-shadow:0 0 20px gold,0 8px 0 rgba(0,0,0,.5)}
-.levelDot.ok:active{transform:scale(1.2)}
-@keyframes float{to{transform:perspective(400px) rotateX(10deg) translateY(-4px)}}
-@keyframes pop{to{transform:perspective(400px) rotateX(5deg) translateY(-12px) scale(1.18)}}
-.topBar{position:fixed;top:0;left:0;right:0;z-index:100;max-width:480px;margin:auto;background:linear-gradient(#2a2a6a,#1a1a4a);border-radius:0 0 22px 22px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;color:#fff;box-shadow:0 6px 0 #0003;border:3px solid #fff;border-top:0}
-#gameScreen{position:fixed;inset:0;z-index:200;background:radial-gradient(circle,#ffd6f3,#9bd8ff,#b5a6ff);display:none;flex-direction:column;align-items:center}
-#gameScreen.on{display:flex}
-.bar{width:95%;max-width:440px;margin-top:8px;background:linear-gradient(90deg,#4dd0e1,#26c6da);border-radius:18px;padding:6px 10px;display:flex;justify-content:space-between;border:3px solid #fff;color:#fff;box-shadow:0 5px 0 #0002}
-.board{width:95vw;max-width:410px;aspect-ratio:1;background:#fff;border-radius:20px;padding:7px;display:grid;grid-template-columns:repeat(8,1fr);gap:5px;box-shadow:0 0 0 4px #e8d5ff,0 10px 0 #0002;margin-top:10px}
-.cell{border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 4px 0 rgba(0,0,0,.25),inset 0 -4px 0 rgba(0,0,0,.2);cursor:grab;user-select:none}
-.cell.jelly{outline:4px solid #00e5ff;outline-offset:-2px;box-shadow:0 0 12px #00e5ff,0 4px 0 rgba(0,0,0,.25)}
-.t0{background:radial-gradient(#ff8a9a,#d5001f)}.t1{background:radial-gradient(#aaffb0,#00c950)}.t2{background:radial-gradient(#ffb6f0,#ff1a9a)}.t3{background:radial-gradient(#8ac7ff,#0066ff)}.t4{background:radial-gradient(#ffd6a0,#ff7700)}.t5{background:radial-gradient(#d9a0ff,#7a00d6)}.t6{background:radial-gradient(#ffffa0,#ffca00)}
-.cell.hide{animation:blast.3s forwards}@keyframes blast{to{transform:scale(0) rotate(180deg);opacity:0}}
-.musicBtn{width:44px;height:44px;border-radius:50%;background:#ffcc00;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;border:3px solid #fff;box-shadow:0 4px 0 #0003}
-</style></head><body>
-<div class="topBar"><div style="font-size:22px;line-height:.9">🍭 CANDY<br><b style="color:#ffe678">BLAST 100</b></div><div style="display:flex;gap:8px;align-items:center"><div class="musicBtn" id="musicBtn" onclick="toggleMusic()">🔊</div><div style="background:#0008;border-radius:99px;padding:4px 10px;border:2px solid #ffcc00">🪙 <b id="coins">1200</b></div><div style="background:#ff3d8a;border-radius:12px;padding:4px 8px">⭐ LVL <b id="lvlTop">1</b></div></div></div>
-
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>Candy Blast 100</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap');*{margin:0;padding:0;box-sizing:border-box;font-family:'Fredoka';touch-action:none}body{background:#87d6ff;overflow:hidden}#mapScreen{height:100vh;overflow-y:auto}.map{position:relative;width:100%;max-width:480px;margin:auto;height:4200px;background:#a0e0ff url(./map100.jpg) no-repeat top center;background-size:100% 100%}.dot{position:absolute;width:52px;height:52px;border-radius:50%;border:3px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;box-shadow:0 5px 0 #0004;cursor:pointer}.ok{background:radial-gradient(#ff8ab0,#d00040)}.lock{background:#888}.cur{animation:b.7s infinite alternate;box-shadow:0 0 15px gold}@keyframes b{to{transform:translateY(-10px) scale(1.15)}}.top{position:fixed;top:0;left:0;right:0;max-width:480px;margin:auto;background:linear-gradient(#2a2a6a,#1a1a4a);border-radius:0 0 20px 20px;padding:8px 12px;display:flex;justify-content:space-between;color:#fff;z-index:99;border:3px solid #fff;border-top:0}#game{position:fixed;inset:0;z-index:100;background:radial-gradient(#ffd6f3,#9bd8ff);display:none;flex-direction:column;align-items:center}#game.on{display:flex}.bar{width:95%;max-width:440px;margin-top:8px;background:linear-gradient(90deg,#4dd0e1,#26c6da);border-radius:16px;padding:6px 10px;display:flex;justify-content:space-between;border:3px solid #fff;color:#fff}.board{width:95vw;max-width:410px;aspect-ratio:1;background:#fff;border-radius:18px;padding:6px;display:grid;grid-template-columns:repeat(8,1fr);gap:5px;box-shadow:0 0 0 4px #e8d5ff,0 10px 0 #0002;margin-top:10px}.cell{border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 3px 0 #0003}.cell.j{outline:4px solid #00e5ff}.t0{background:radial-gradient(#ff8a9a,#d5001f)}.t1{background:radial-gradient(#aaffb0,#00c950)}.t2{background:radial-gradient(#ffb6f0,#ff1a9a)}.t3{background:radial-gradient(#8ac7ff,#0066ff)}.t4{background:radial-gradient(#ffd6a0,#ff7700)}.t5{background:radial-gradient(#d9a0ff,#7a00d6)}.t6{background:radial-gradient(#ffffa0,#ffca00)}.hide{animation:p.3s forwards}@keyframes p{to{transform:scale(0)}}}</style></head><body>
+<div class="top"><div>🍭 CANDY<br><b style="color:#ffe678">BLAST 100</b></div><div style="display:flex;gap:6px"><div onclick="toggleM()" id="mb" style="width:40px;height:40px;border-radius:50%;background:#ffcc00;display:flex;align-items:center;justify-content:center;border:2px solid #fff">🔊</div><div style="background:#0008;border-radius:20px;padding:4px 10px;border:2px solid #ffcc00">🪙 <b id="coins">1200</b></div><div style="background:#ff3d8a;border-radius:10px;padding:4px 8px">LVL <b id="lt">1</b></div></div></div>
 <div id="mapScreen"><div class="map" id="map"></div></div>
-
-<div id="gameScreen">
-<div class="bar"><div>❤️ <b>5</b> LIVES</div><div style="text-align:center"><b>LEVEL <span id="lvl">1</span></b><br><small id="goalTxt">Clear 12 Jellies</small></div><div>MOVES <b id="mv">20</b><br><small>SCORE <b id="sc">0</b></small></div></div>
-<div class="board" id="board"></div>
-<div style="width:95%;max-width:440px;margin-top:10px;display:flex;justify-content:space-between"><button onclick="closeGame()" style="background:#fff;border:3px solid #ff3d8a;color:#ff3d8a;padding:8px 16px;border-radius:20px;font-weight:800">⬅️ MAP</button><button onclick="toggleMusic()" style="background:#00e5ff;border:3px solid #fff;color:#fff;padding:8px 16px;border-radius:20px">🎵 BGMI BEAT: <span id="mTxt">ON</span></button><button onclick="shuffleBoard()" style="background:#ffcc00;border:3px solid #fff;padding:8px 16px;border-radius:20px">🔀 Shuffle</button></div>
-</div>
-
-<audio id="bgm" loop preload="auto"><source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_6c0d2e5a44.mp3?filename=bgmi-lobby-124379.mp3" type="audio/mpeg"></audio>
-<audio id="sfxPop"><source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1a6b1.mp3?filename=pop-39222.mp3"></audio>
-
+<div id="game"><div class="bar"><div>❤️ 5</div><div><b>LEVEL <span id="lv">1</span></b> <small id="gt">Clear 12</small></div><div>MOVES <b id="mv">20</b> SCORE <b id="sc">0</b></div></div><div class="board" id="board"></div><div style="width:95%;max-width:440px;margin-top:10px;display:flex;justify-content:space-between"><button onclick="closeG()" style="background:#fff;border:2px solid #ff3d8a;color:#ff3d8a;padding:6px 14px;border-radius:20px">⬅️ MAP</button><button onclick="shuffleB()" style="background:#ffcc00;border:2px solid #fff;padding:6px 14px;border-radius:20px">🔀 Shuffle</button></div></div>
+<audio id="bgm" loop><source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_6c0d2e5a44.mp3?filename=bgmi-lobby-124379.mp3"></audio>
 <script>
-let unlocked=parseInt(localStorage.getItem('cb100_unlock')||'1'), coins=parseInt(localStorage.getItem('cb100_coins')||'1200');
-document.getElementById('coins').innerText=coins; document.getElementById('lvlTop').innerText=unlocked;
-// GENERATE 100 LEVEL POSITIONS ALONG WINDING PATH
-const map=document.getElementById('map');
-let dots=[];
-for(let i=1;i<=100;i++){
- let progress=(i-1)/99; // 0 to 1 from bottom to top
- let y=96 - progress*92; // bottom 96% to top 4%
- let wave=Math.sin(progress*22)*18; // winding left-right
- let x=50 + wave + (progress<0.2?0:progress<0.4?5:progress<0.6?-5:progress<0.8?8:-6);
- if(x<28) x=28; if(x>72) x=72;
- dots.push({l:i,x:x,y:y});
-}
-dots.forEach(p=>{
- let d=document.createElement('div');
- d.className='levelDot '+(p.l>unlocked?'lock':(p.l==unlocked?'ok cur':'ok'));
- d.style.left=p.x+'%'; d.style.top=p.y+'%'; d.style.marginLeft='-27px'; d.style.marginTop='-27px';
- d.innerText=p.l>unlocked?'🔒':p.l;
- d.onclick=()=>{if(p.l>unlocked){alert('🔒 Locked! Pehle Level '+(unlocked)+' clear karo');return} openLevel(p.l)};
- if(p.l%10==0){d.style.width='64px';d.style.height='64px';d.style.marginLeft='-32px';d.style.background='radial-gradient(circle at 30% 30%,#ffe678,#ff8a00 60%,#c00000)';d.innerText='⭐'+p.l}
- map.appendChild(d);
-});
-setTimeout(()=>{document.getElementById('mapScreen').scrollTop=document.getElementById('mapScreen').scrollHeight},800);
-
-// GAME LOGIC - REAL SLIDE
-let EMO=["❤️","🧩","🍥","🔵","🍊","🌀","🍋"], N=8, grid=[], jelly=[], score=0, moves=0, cleared=0, need=12, curLevel=1;
-let startX=0,startY=0,startCell=null,isSwiping=false;
-const boardEl=document.getElementById('board');
-function openLevel(lv){
- curLevel=lv;
- document.getElementById('lvl').innerText=lv;
- need=10+Math.floor(lv/3); moves=18+Math.floor(lv/4); score=0; cleared=0;
- document.getElementById('goalTxt').innerText='Clear '+need+' Jellies';
- initBoard();
- document.getElementById('gameScreen').classList.add('on');
- playMusic();
-}
-function closeGame(){document.getElementById('gameScreen').classList.remove('on')}
-function rnd(){return Math.floor(Math.random()*7)}
-function initBoard(){
- grid=[]; jelly=[];
- for(let r=0;r<N;r++){grid[r]=[];jelly[r]=[];for(let c=0;c<N;c++){grid[r][c]=rnd(); jelly[r][c]=Math.random()<0.35+curLevel*0.002}}
- for(let r=0;r<N;r++) for(let c=0;c<N;c++) while(isMatchAt(r,c)) grid[r][c]=rnd();
- drawBoard();
-}
-function isMatchAt(r,c){let v=grid[r][c]; if(c>=2&&grid[r][c-1]==v&&grid[r][c-2]==v) return true; if(r>=2&&grid[r-1][c]==v&&grid[r-2][c]==v) return true; return false}
-function drawBoard(){
- boardEl.innerHTML='';
- for(let r=0;r<N;r++) for(let c=0;c<N;c++){
-  let d=document.createElement('div'); d.className='cell t'+grid[r][c]+(jelly[r][c]?' jelly':''); d.innerHTML=EMO[grid[r][c]]; d.dataset.r=r; d.dataset.c=c;
-  d.addEventListener('touchstart',sS,{passive:false}); d.addEventListener('mousedown',sS); d.addEventListener('touchend',sE,{passive:false}); d.addEventListener('mouseup',sE);
-  boardEl.appendChild(d);
- }
- document.getElementById('mv').innerText=moves; document.getElementById('sc').innerText=score; document.getElementById('jt')?0:0;
-}
-function sS(e){e.preventDefault(); let t=e.touches?e.touches[0]:e; startX=t.clientX; startY=t.clientY; startCell={r:+this.dataset.r,c:+this.dataset.c}; isSwiping=true; this.style.transform='scale(1.25)'; this.style.zIndex=5}
-function sE(e){
- e.preventDefault(); if(!isSwiping||!startCell) return; let t=e.changedTouches?e.changedTouches[0]:e; let dx=t.clientX-startX, dy=t.clientY-startY;
- if(Math.abs(dx)<18&&Math.abs(dy)<18){isSwiping=false;drawBoard();return}
- let nr=startCell.r, nc=startCell.c;
- if(Math.abs(dx)>Math.abs(dy)) nc+=dx>0?1:-1; else nr+=dy>0?1:-1;
- if(nr<0||nr>=N||nc<0||nc>=N){isSwiping=false;drawBoard();return}
- swap(startCell.r,startCell.c,nr,nc);
- let m=findMatches();
- if(m.length>0){moves--; playPop(); process(m)} else {swap(startCell.r,startCell.c,nr,nc); boardEl.children[startCell.r*N+startCell.c].animate([{transform:'translateX(0)'},{transform:'translateX(8px)'},{transform:'translateX(-8px)'},{transform:'translateX(0)'}],{duration:220})}
- isSwiping=false; startCell=null;
-}
-function swap(a,b,c,d){let t=grid[a][b];grid[a][b]=grid[c][d];grid[c][d]=t; let tj=jelly[a][b];jelly[a][b]=jelly[c][d];jelly[c][d]=tj}
-function findMatches(){let set=new Set(); for(let r=0;r<N;r++) for(let c=0;c<N-2;c++){let v=grid[r][c]; if(v==grid[r][c+1]&&v==grid[r][c+2]){let k=c; while(k<N&&grid[r][k]==v){set.add(r+','+k);k++}}} for(let c=0;c<N;c++) for(let r=0;r<N-2;r++){let v=grid[r][c]; if(v==grid[r+1][c]&&v==grid[r+2][c]){let k=r; while(k<N&&grid[k][c]==v){set.add(k+','+c);k++}}} return [...set].map(s=>{let [r,c]=s.split(',').map(Number);return {r,c}})}
-function process(ms){
- if(ms.length==0){drawBoard(); checkWin(); return}
- ms.forEach(({r,c})=>{let el=boardEl.children[r*N+c]; el.classList.add('hide'); if(jelly[r][c]){jelly[r][c]=false; cleared++; score+=150}});
- score+=ms.length*100;
- setTimeout(()=>{ms.forEach(({r,c})=>{for(let rr=r;rr>0;rr--){grid[rr][c]=grid[rr-1][c]; jelly[rr][c]=jelly[rr-1][c]} grid[0][c]=rnd(); jelly[0][c]=false}); let more=findMatches(); if(more.length>0){playPop(); process(more)} else {drawBoard(); checkWin()}},320);
-}
-function checkWin(){
- if(cleared>=need){
-  alert('🎉 LEVEL '+curLevel+' COMPLETE! 🔥 BGMI STYLE WIN!');
-  if(curLevel==unlocked){unlocked++; localStorage.setItem('cb100_unlock',unlocked); coins+=50+curLevel; localStorage.setItem('cb100_coins',coins); document.getElementById('coins').innerText=coins; document.getElementById('lvlTop').innerText=unlocked}
-  if(curLevel>=100){alert('🏆🏆 CONGRATULATIONS! 100 LEVELS FINISH! YOU ARE CANDY KING! 🏆🏆'); unlocked=1; localStorage.setItem('cb100_unlock',1)}
-  closeGame(); location.reload();
- }
- if(moves<=0&&cleared<need){alert('😢 Moves Khatam! Level '+curLevel+' Retry karo!'); closeGame()}
-}
-function shuffleBoard(){for(let i=0;i<100;i++){let r1=Math.floor(Math.random()*N),c1=Math.floor(Math.random()*N),r2=Math.floor(Math.random()*N),c2=Math.floor(Math.random()*N); swap(r1,c1,r2,c2)} drawBoard(); moves--; document.getElementById('mv').innerText=moves;}
-// BGMI MUSIC
-let musicOn=false;
-function playMusic(){let a=document.getElementById('bgm'); a.volume=0.5; a.play().catch(()=>{}); musicOn=true; document.getElementById('musicBtn').innerText='🔊'; document.getElementById('mTxt').innerText='ON'}
-function toggleMusic(){
- let a=document.getElementById('bgm'); let btn=document.getElementById('musicBtn');
- if(musicOn){a.pause(); musicOn=false; btn.innerText='🔇'; document.getElementById('mTxt').innerText='OFF'} else {a.play(); musicOn=true; btn.innerText='🔊'; document.getElementById('mTxt').innerText='ON'}
-}
-function playPop(){let p=document.getElementById('sfxPop'); p.currentTime=0; p.volume=0.6; p.play().catch(()=>{})}
+let unlocked=parseInt(localStorage.getItem('cb100_u')||'1'),coins=1200;document.getElementById('lt').innerText=unlocked;
+const map=document.getElementById('map');for(let i=1;i<=100;i++){let p=(i-1)/99,y=96-p*92,w=Math.sin(p*22)*18,x=50+w+(p<0.2?0:p<0.4?5:p<0.6?-5:p<0.8?8:-6);if(x<28)x=28;if(x>72)x=72;let d=document.createElement('div');d.className='dot '+(i>unlocked?'lock':(i==unlocked?'ok cur':'ok'));d.style.left=x+'%';d.style.top=y+'%';d.style.marginLeft='-26px';d.style.marginTop='-26px';d.innerText=i>unlocked?'🔒':i;if(i%10==0){d.style.width='62px';d.style.height='62px';d.style.marginLeft='-31px';d.style.background='radial-gradient(#ffe678,#ff8a00)';d.innerText='⭐'+i}d.onclick=()=>{if(i>unlocked){alert('Level '+unlocked+' clear karo');return}openL(i)};map.appendChild(d);}setTimeout(()=>{document.getElementById('mapScreen').scrollTop=99999},800);
+let EMO=["❤️","🧩","🍥","🔵","🍊","🌀","🍋"],N=8,grid=[],jelly=[],score=0,moves=0,cleared=0,need=12,cur=1,sx=0,sy=0,sc=null,sw=false;const boardEl=document.getElementById('board');
+function openL(l){cur=l;document.getElementById('lv').innerText=l;need=10+Math.floor(l/3);moves=18+Math.floor(l/4);score=0;cleared=0;document.getElementById('gt').innerText='Clear '+need;initB();document.getElementById('game').classList.add('on');playM();}
+function closeG(){document.getElementById('game').classList.remove('on')}function rnd(){return Math.floor(Math.random()*7)}
+function initB(){grid=[];jelly=[];for(let r=0;r<N;r++){grid[r]=[];jelly[r]=[];for(let c=0;c<N;c++){grid[r][c]=rnd();jelly[r][c]=Math.random()<0.4}}for(let r=0;r<N;r++)for(let c=0;c<N;c++)while(isM(r,c))grid[r][c]=rnd();drawB();}
+function isM(r,c){let v=grid[r][c];if(c>=2&&grid[r][c-1]==v&&grid[r][c-2]==v)return true;if(r>=2&&grid[r-1][c]==v&&grid[r-2][c]==v)return true;return false}
+function drawB(){boardEl.innerHTML='';for(let r=0;r<N;r++)for(let c=0;c<N;c++){let d=document.createElement('div');d.className='cell t'+grid[r][c]+(jelly[r][c]?' j':'');d.innerHTML=EMO[grid[r][c]];d.dataset.r=r;d.dataset.c=c;d.addEventListener('touchstart',sS,{passive:false});d.addEventListener('mousedown',sS);d.addEventListener('touchend',sE,{passive:false});d.addEventListener('mouseup',sE);boardEl.appendChild(d);}document.getElementById('mv').innerText=moves;document.getElementById('sc').innerText=score;}
+function sS(e){e.preventDefault();let t=e.touches?e.touches[0]:e;sx=t.clientX;sy=t.clientY;sc={r:+this.dataset.r,c:+this.dataset.c};sw=true;}
+function sE(e){e.preventDefault();if(!sw||!sc)return;let t=e.changedTouches?e.changedTouches[0]:e,dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)<18&&Math.abs(dy)<18){sw=false;drawB();return}let nr=sc.r,nc=sc.c;if(Math.abs(dx)>Math.abs(dy))nc+=dx>0?1:-1;else nr+=dy>0?1:-1;if(nr<0||nr>=N||nc<0||nc>=N){sw=false;drawB();return}swap(sc.r,sc.c,nr,nc);let m=findM();if(m.length>0){moves--;proc(m)}else{swap(sc.r,sc.c,nr,nc);}sw=false;sc=null;}
+function swap(a,b,c,d){let t=grid[a][b];grid[a][b]=grid[c][d];grid[c][d]=t;let tj=jelly[a][b];jelly[a][b]=jelly[c][d];jelly[c][d]=tj;}
+function findM(){let s=new Set();for(let r=0;r<N;r++)for(let c=0;c<N-2;c++){let v=grid[r][c];if(v==grid[r][c+1]&&v==grid[r][c+2]){let k=c;while(k<N&&grid[r][k]==v){s.add(r+','+k);k++;}}}for(let c=0;c<N;c++)for(let r=0;r<N-2;r++){let v=grid[r][c];if(v==grid[r+1][c]&&v==grid[r+2][c]){let k=r;while(k<N&&grid[k][c]==v){s.add(k+','+c);k++;}}}return [...s].map(x=>{let[r,c]=x.split(',').map(Number);return{r,c}});}
+function proc(ms){if(ms.length==0){drawB();checkW();return}ms.forEach(({r,c})=>{let el=boardEl.children[r*N+c];el.classList.add('hide');if(jelly[r][c]){jelly[r][c]=false;cleared++;score+=150;}});score+=ms.length*100;setTimeout(()=>{ms.forEach(({r,c})=>{for(let rr=r;rr>0;rr--){grid[rr][c]=grid[rr-1][c];jelly[rr][c]=jelly[rr-1][c]}grid[0][c]=rnd();jelly[0][c]=false;});let more=findM();if(more.length>0)proc(more);else{drawB();checkW()}},300);}
+function checkW(){if(cleared>=need){alert('🎉 LEVEL '+cur+' COMPLETE!');if(cur==unlocked){unlocked++;localStorage.setItem('cb100_u',unlocked)}closeG();location.reload()}if(moves<=0&&cleared<need){alert('Moves khatam!');closeG()}}
+function shuffleB(){for(let i=0;i<100;i++){let r1=Math.floor(Math.random()*N),c1=Math.floor(Math.random()*N),r2=Math.floor(Math.random()*N),c2=Math.floor(Math.random()*N);swap(r1,c1,r2,c2)}drawB();moves--;document.getElementById('mv').innerText=moves;}
+let musicOn=false;function playM(){let a=document.getElementById('bgm');a.volume=0.5;a.play().catch(()=>{});musicOn=true;}function toggleM(){let a=document.getElementById('bgm');if(musicOn){a.pause();musicOn=false;document.getElementById('mb').innerText='🔇'}else{a.play();musicOn=true;document.getElementById('mb').innerText='🔊'}}
 </script></body></html>
