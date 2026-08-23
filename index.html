@@ -2,117 +2,206 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<title>Candy Blast</title> 
- <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#a855f7"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Candy Blast - 100 Levels</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7b2cff">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#ff7eb3,#7b61ff);min-height:100vh;color:#fff;display:flex;justify-content:center;align-items:center;overflow:hidden}
-.game{width:min(100%,480px);min-height:100vh;padding:18px 14px;display:flex;flex-direction:column;justify-content:center}
-h1{text-align:center;font-size:42px;text-shadow:0 4px 8px #0005;margin-bottom:8px}
-.top{display:flex;gap:8px;justify-content:space-between;margin-bottom:14px}
-.card{background:#ffffff22;border:1px solid #ffffff44;border-radius:14px;padding:9px 12px;text-align:center;backdrop-filter:blur(8px);flex:1}
-.card small{display:block;font-size:11px;opacity:.8}.card b{font-size:21px}
-#board{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;background:#ffffff2b;padding:8px;border-radius:18px;box-shadow:0 12px 30px #0004;touch-action:none}
-.candy{aspect-ratio:1;border-radius:25%;border:2px solid #ffffff66;box-shadow:inset 0 3px 4px #fff8,0 3px 5px #0004;cursor:pointer;transition:transform .12s}
-.candy.selected{transform:scale(.82);outline:3px solid #fff;outline-offset:1px}
-.red{background:#ff4d6d}.yellow{background:#ffd43b}.green{background:#35d07f}.blue{background:#3d8bff}.purple{background:#a95cff}.orange{background:#ff963d}
-button{margin:18px auto 0;border:0;border-radius:25px;padding:12px 25px;font-size:16px;font-weight:bold;background:#fff;color:#7b3cff;box-shadow:0 5px 12px #0003}
-#msg{text-align:center;height:22px;margin-top:10px;font-weight:bold}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Fredoka One',cursive;background:radial-gradient(circle at top,#ff7ac3,#7b2cff,#1a0a3d);min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden}
+.screen{width:390px;height:700px;background:linear-gradient(180deg,rgba(255,255,255,0.22),rgba(255,255,255,0.06));backdrop-filter:blur(25px);border-radius:40px;border:2px solid rgba(255,255,255,0.35);box-shadow:0 25px 60px rgba(0,0,0,0.45);display:none;flex-direction:column;overflow:hidden}
+.screen.active{display:flex;animation:pop 0.45s ease}
+@keyframes pop{0%{transform:scale(0.9);opacity:0}100%{transform:scale(1);opacity:1}}
+.map-header{background:linear-gradient(90deg,#ff3e8d,#ff9a44);padding:18px;text-align:center;color:white;box-shadow:0 5px 15px rgba(0,0,0,0.25)}
+.map-header h1{font-size:30px;letter-spacing:2px;text-shadow:0 3px 0 rgba(0,0,0,0.2)}
+.map-header p{font-size:12px;opacity:0.9;margin-top:4px}
+.map-stats{display:flex;gap:8px;padding:10px;background:rgba(0,0,0,0.18)}
+.mini-box{flex:1;background:white;border-radius:14px;padding:7px;text-align:center;color:#7b2cff}
+.mini-box b{font-size:16px;display:block}.mini-box span{font-size:9px;color:#999}
+.level-road{flex:1;overflow-y:auto;padding:14px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-content:start}
+.level-circle{width:100%;aspect-ratio:1;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 5px 12px rgba(0,0,0,0.3), inset 0 -4px rgba(0,0,0,0.2);transition:0.15s;border:3px solid white;position:relative}
+.level-circle.unlocked{background:linear-gradient(180deg,#fff,#fffa65)}
+.level-circle.locked{background:linear-gradient(180deg,#444,#1a1a1a);color:#888;cursor:not-allowed;border-color:rgba(255,255,255,0.15)}
+.level-circle.current{border-color:#00ffcc;box-shadow:0 0 20px #00ffcc, 0 6px 15px rgba(0,0,0,0.3);animation:glow 1.4s infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 15px #00ffcc}50%{box-shadow:0 0 28px #00ffcc}}
+.level-circle b{font-size:20px;color:#7b2cff}.level-circle.locked b{color:#888}
+.level-circle small{font-size:8px;color:#ff3e8d;margin-top:2px}.level-circle.locked small{color:#666}
+.game-top{background:linear-gradient(90deg,#7b2cff,#ff3e8d);padding:10px;display:flex;justify-content:space-between;color:white}
+.g-box{background:white;color:#7b2cff;border-radius:12px;padding:4px 10px;text-align:center;min-width:58px}
+.g-box span{font-size:9px;display:block;color:#999}.g-box b{font-size:15px}
+#bar{height:10px;background:rgba(0,0,0,0.25)}.progress{height:100%;background:linear-gradient(90deg,#00ffcc,#fffa65);width:0%;transition:width 0.4s}
+.board{margin:10px;background:rgba(0,0,0,0.22);border-radius:20px;padding:8px;display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.candy{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;box-shadow:inset 0 -3px rgba(0,0,0,0.22);transition:0.12s;user-select:none}
+.candy.sel{transform:scale(1.18);box-shadow:0 0 14px white}
+.c0{background:#ff4757}.c1{background:#2ed573}.c2{background:#1e90ff}.c3{background:#ffa502}.c4{background:#a55eea}.c5{background:#fffa65}
+.blast{animation:blast 0.28s forwards}@keyframes blast{to{transform:scale(0) rotate(180deg);opacity:0}}
+.btn{width:calc(100% - 20px);margin:8px 10px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:white;padding:11px;border-radius:22px;font-family:inherit;cursor:pointer}
+#win{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:50;color:white;text-align:center;padding:20px}
+.btn-main{background:white;color:#ff3e8d;border:none;padding:14px 42px;border-radius:50px;font-size:20px;font-family:inherit;cursor:pointer;margin:8px;box-shadow:0 8px 22px rgba(0,0,0,0.35)}
 </style>
 </head>
 <body>
-<div class="game">
-<h1>🍬 Candy Blast</h1>
-<div class="top">
-<div class="card"><small>SCORE</small><b id="score">0</b></div>
-<div class="card"><small>MOVES</small><b id="moves">30</b></div>
-<div class="card"><small>BEST</small><b id="best">0</b></div>
-</div>
-<div id="board"></div>
-<div id="msg">Match 3 or more candies!</div>
-<button onclick="newGame()">New Game</button>
-</div>
-<script>
-const N=8, colors=["red","yellow","green","blue","purple","orange"];
-let board=[],selected=null,score=0,moves=30,best=Number(localStorage.candyBlastBest||0),busy=false;
-document.getElementById("best").textContent=best;
 
-function randomCandy(){return Math.floor(Math.random()*colors.length)}
-function newGame(){
- score=0;moves=30;selected=null;busy=false;
- do{board=Array.from({length:N},()=>Array.from({length:N},randomCandy))}while(findMatches().length);
- update();draw();message("Match 3 or more candies!");
-}
-function draw(){
- const el=document.getElementById("board");el.innerHTML="";
- board.forEach((row,r)=>row.forEach((v,c)=>{
-  const d=document.createElement("div");
-  d.className="candy "+colors[v]+(selected&&selected.r===r&&selected.c===c?" selected":"");
-  d.dataset.r=r;d.dataset.c=c;
-  d.onclick=()=>pick(r,c);el.appendChild(d);
- }));
-}
-function pick(r,c){
- if(busy||moves<=0)return;
- if(!selected){selected={r,c};draw();return}
- const a=selected;selected=null;
- if(Math.abs(a.r-r)+Math.abs(a.c-c)!==1){selected={r,c};draw();return}
- swap(a.r,a.c,r,c);
- const matches=findMatches();
- if(!matches.length){swap(a.r,a.c,r,c);message("Try another move!");draw();return}
- moves--;busy=true;resolve();
-}
-function swap(r1,c1,r2,c2){[board[r1][c1],board[r2][c2]]=[board[r2][c2],board[r1][c1]]}
-function findMatches(){
- const set=new Set();
- for(let r=0;r<N;r++){
-  let start=0;
-  for(let c=1;c<=N;c++){
-   if(c<N&&board[r][c]===board[r][start])continue;
-   if(c-start>=3)for(let x=start;x<c;x++)set.add(r*N+x);
-   start=c;
+<div id="mapScreen" class="screen active">
+  <div class="map-header">
+    <h1>🍬 CANDY BLAST</h1>
+    <p>100 LEVELS • TAP TO PLAY • MUSIC CHANGES EVERY 10 LEVELS</p>
+  </div>
+  <div class="map-stats">
+    <div class="mini-box"><span>UNLOCKED</span><b id="unlockedTxt">1/100</b></div>
+    <div class="mini-box"><span>SCORE</span><b id="totalTxt">0</b></div>
+    <div class="mini-box"><span>MUSIC</span><b id="themeTxt">Sweet</b></div>
+  </div>
+  <div class="level-road" id="road"></div>
+  <button class="btn" onclick="toggleMusic()">🔊 Music: <span id="musicBtnTxt">ON</span> • Sound: <span id="soundBtnTxt">ON</span></button>
+</div>
+
+<div id="gameScreen" class="screen">
+  <div class="game-top">
+    <div class="g-box"><span>LEVEL</span><b id="lvl">1</b></div>
+    <div class="g-box"><span>MOVES</span><b id="moves">20</b></div>
+    <div class="g-box"><span>SCORE</span><b id="score">0</b></div>
+  </div>
+  <div style="background:white;color:#7b2cff;text-align:center;padding:6px;font-size:11px">TARGET: <b id="target">500</b> • 🎵 <span id="musicName">Sweet</span> • <span id="lvlTheme">1-10</span></div>
+  <div id="bar"><div class="progress" id="progress"></div></div>
+  <div class="board" id="board"></div>
+  <button class="btn" onclick="showMap()">⬅️ Back to Map</button>
+</div>
+
+<div id="win">
+  <div style="font-size:70px" id="winEmoji">🎉</div>
+  <h1 id="winTitle" style="font-size:32px;margin-top:10px"></h1>
+  <p id="winText" style="margin:12px 0;opacity:0.85"></p>
+  <button class="btn-main" onclick="nextLevel()">Next Level ➡️</button>
+  <button class="btn-main" style="background:rgba(255,255,255,0.2);color:white;font-size:16px" onclick="showMap()">🗺️ Level Map</button>
+</div>
+
+<script>
+const emojis=['🍬','🍏','💎','🍊','🍓','🍋'];
+const THEMES=[
+  {name:"Sweet", notes:[262,330,392,523], tempo:420, range:"1-10"},
+  {name:"Jungle", notes:[196,247,294,330,392], tempo:340, range:"11-20"},
+  {name:"Space", notes:[330,370,440,550,660], tempo:300, range:"21-30"},
+  {name:"Party", notes:[262,294,330,392,440,523,587], tempo:230, range:"31-40"},
+  {name:"Ice", notes:[523,659,784,659,523], tempo:480, range:"41-50"},
+  {name:"Fire", notes:[200,240,300,400,500,600], tempo:190, range:"51-60"},
+  {name:"Night", notes:[220,262,330,262,196], tempo:580, range:"61-70"},
+  {name:"Electric", notes:[440,500,600,700,800], tempo:170, range:"71-80"},
+  {name:"Champion", notes:[392,440,494,523,587,659,784], tempo:210, range:"81-90"},
+  {name:"Legend", notes:[262,392,523,784,1046], tempo:195, range:"91-100"}
+];
+
+let board=[], score=0, level=1, moves=20, target=500, sel=null, maxUnlocked=1, total=0;
+let musicOn=true, soundOn=true, ctx=null, timer=null;
+
+function getCtx(){ if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)(); if(ctx.state==='suspended') ctx.resume(); return ctx; }
+function playTone(freq,type,vol,dur){ if(!soundOn) return; try{ const c=getCtx(); const o=c.createOscillator(), g=c.createGain(); o.type=type; o.frequency.value=freq; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(vol,c.currentTime); g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur); o.start(); o.stop(c.currentTime+dur);}catch(e){} }
+function load(){ maxUnlocked=parseInt(localStorage.getItem('candy_max')||1); total=parseInt(localStorage.getItem('candy_score')||0); document.getElementById('unlockedTxt').textContent=maxUnlocked+'/100'; document.getElementById('totalTxt').textContent=total; }
+function save(){ localStorage.setItem('candy_max',maxUnlocked); localStorage.setItem('candy_score',total); }
+function showMap(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('mapScreen').classList.add('active'); buildRoad(); load(); clearInterval(timer); }
+function showGame(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('gameScreen').classList.add('active'); }
+function getTheme(lv){ return THEMES[Math.min(Math.floor((lv-1)/10),9)]; }
+
+function buildRoad(){
+  let road=document.getElementById('road'); road.innerHTML='';
+  for(let i=1;i<=100;i++){
+    let th=THEMES[Math.floor((i-1)/10)];
+    let d=document.createElement('div');
+    d.className='level-circle '+(i>maxUnlocked?'locked':i===maxUnlocked?'current':'unlocked');
+    d.innerHTML='<b>'+(i>maxUnlocked?'🔒':i)+'</b><small>'+th.name+'</small>';
+    if(i<=maxUnlocked) d.onclick=()=>{ startLevel(i); };
+    road.appendChild(d);
   }
- }
- for(let c=0;c<N;c++){
-  let start=0;
-  for(let r=1;r<=N;r++){
-   if(r<N&&board[r][c]===board[start][c])continue;
-   if(r-start>=3)for(let x=start;x<r;x++)set.add(x*N+c);
-   start=r;
+}
+
+function playMusic(){
+  clearInterval(timer); if(!musicOn) return;
+  let th=getTheme(level);
+  document.getElementById('musicName').textContent=th.name;
+  document.getElementById('themeTxt').textContent=th.name;
+  document.getElementById('lvlTheme').textContent=th.range;
+  let i=0;
+  timer=setInterval(()=>{
+    if(!musicOn) return;
+    try{
+      const c=getCtx(); const o=c.createOscillator(), g=c.createGain();
+      o.frequency.value=th.notes[i%th.notes.length];
+      o.type=level<30?'triangle':level<70?'sine':'sawtooth';
+      o.connect(g); g.connect(c.destination);
+      g.gain.setValueAtTime(0.07,c.currentTime); g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.45);
+      o.start(); o.stop(c.currentTime+0.45); i++;
+    }catch(e){}
+  }, th.tempo);
+}
+function toggleMusic(){
+  if(event && event.target.id==='mapScreen') return;
+  // Toggle both
+  if(musicOn || soundOn){ // simple toggle
+    // If clicking map button - toggle music
+    musicOn=!musicOn; soundOn=musicOn;
   }
- }
- return [...set].map(x=>[Math.floor(x/N),x%N]);
+  document.getElementById('musicBtnTxt').textContent=musicOn?'ON':'OFF';
+  document.getElementById('soundBtnTxt').textContent=soundOn?'ON':'OFF';
+  if(musicOn){ playMusic(); } else { clearInterval(timer); }
 }
-async function resolve(){
- let chain=0;
- while(true){
-  const m=findMatches();if(!m.length)break;
-  chain++;score+=m.length*10*chain;
-  m.forEach(([r,c])=>board[r][c]=-1);
-  draw();await wait(180);
-  for(let c=0;c<N;c++){
-   let write=N-1;
-   for(let r=N-1;r>=0;r--)if(board[r][c]!==-1)board[write--][c]=board[r][c];
-   for(let r=write;r>=0;r--)board[r][c]=randomCandy();
+
+function getData(lv){ return {target:380+lv*155+Math.floor(lv/10)*380, moves:Math.max(10,26-Math.floor(lv/8))}; }
+function startLevel(lv){
+  getCtx(); level=lv; let d=getData(lv); target=d.target; moves=d.moves; score=0; sel=null;
+  document.getElementById('lvl').textContent=lv;
+  document.getElementById('target').textContent=target;
+  document.getElementById('moves').textContent=moves;
+  document.getElementById('score').textContent=0;
+  document.getElementById('progress').style.width='0%';
+  board=[]; for(let i=0;i<64;i++) board.push(Math.floor(Math.random()*6));
+  draw(); showGame(); playMusic(); setTimeout(checkMatches,250);
+}
+function draw(){ let el=document.getElementById('board'); el.innerHTML=''; board.forEach((c,i)=>{ let d=document.createElement('div'); d.className='candy c'+c; d.textContent=emojis[c]; if(sel===i) d.classList.add('sel'); d.onclick=()=>click(i); el.appendChild(d); }); }
+function click(i){
+  if(moves<=0) return; getCtx();
+  if(sel===null){ sel=i; playTone(700,'sine',0.25,0.12); draw(); }
+  else{
+    let r1=Math.floor(sel/8),c1=sel%8,r2=Math.floor(i/8),c2=i%8;
+    if(Math.abs(r1-r2)+Math.abs(c1-c2)===1){
+      [board[sel],board[i]]=[board[i],board[sel]];
+      if(!hasMatch()){ [board[sel],board[i]]=[board[i],board[sel]]; playTone(150,'square',0.2,0.15); sel=null; }
+      else{ moves--; document.getElementById('moves').textContent=moves; playTone(850,'sine',0.35,0.18); sel=null; draw(); setTimeout(checkMatches,180); }
+    } else { sel=i; }
+    draw();
   }
-  draw();await wait(180);
- }
- busy=false;update();
- if(moves<=0)message("Game over! Final score: "+score);
- else message(chain>1?"Combo x"+chain+"!":"Great!");
 }
-function update(){
- document.getElementById("score").textContent=score;
- document.getElementById("moves").textContent=moves;
- if(score>best){best=score;localStorage.candyBlastBest=best}
- document.getElementById("best").textContent=best;
+function hasMatch(){ for(let r=0;r<8;r++) for(let c=0;c<6;c++){ let idx=r*8+c; if(board[idx]===board[idx+1]&&board[idx]===board[idx+2]) return true; } for(let r=0;r<6;r++) for(let c=0;c<8;c++){ let idx=r*8+c; if(board[idx]===board[idx+8]&&board[idx]===board[idx+16]) return true; } return false; }
+function checkMatches(){
+  let m=new Set();
+  for(let r=0;r<8;r++) for(let c=0;c<6;c++){ let i=r*8+c; if(board[i]===board[i+1]&&board[i]===board[i+2]){ m.add(i); m.add(i+1); m.add(i+2); } }
+  for(let r=0;r<6;r++) for(let c=0;c<8;c++){ let i=r*8+c; if(board[i]===board[i+8]&&board[i]===board[i+16]){ m.add(i); m.add(i+8); m.add(i+16); } }
+  if(m.size>0){
+    score+=m.size*20; document.getElementById('score').textContent=score;
+    document.getElementById('progress').style.width=Math.min(100,score/target*100)+'%';
+    m.forEach(i=>{ let el=document.getElementById('board').children[i]; if(el) el.classList.add('blast'); });
+    playTone(500+Math.random()*300,'sine',0.35,0.2);
+    setTimeout(()=>{
+      m.forEach(i=>board[i]=Math.floor(Math.random()*6)); draw();
+      if(score>=target){ win(); } else { setTimeout(checkMatches,200); }
+      if(moves<=0 && score<target){ setTimeout(()=>{ alert('Moves Khatam! Level '+level+' Restart'); startLevel(level); },300); }
+    },280);
+  }
 }
-function message(t){document.getElementById("msg").textContent=t}
-function wait(ms){return new Promise(r=>setTimeout(r,ms))}
-newGame();
-</script> 
- <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}</script>
+function win(){
+  total+=score; if(level>=maxUnlocked) maxUnlocked=Math.min(100,level+1); save();
+  document.getElementById('win').style.display='flex';
+  document.getElementById('winEmoji').textContent=level>=100?'🏆':'🎉';
+  document.getElementById('winTitle').textContent=level>=100?'YOU ARE LEGEND! 100 LEVELS!':'Level '+level+' Complete!';
+  let nextTh=level<100?getTheme(level+1).name:'Legend';
+  document.getElementById('winText').textContent='Score: '+score+' / '+target+' | Next Music: '+nextTh+' 🎵';
+  clearInterval(timer); playTone(600,'sine',0.4,0.3); setTimeout(()=>playTone(800,'sine',0.4,0.4),200); setTimeout(()=>playTone(1000,'sine',0.4,0.6),400);
+}
+function nextLevel(){ document.getElementById('win').style.display='none'; if(level<100) level++; else level=1; startLevel(level); }
+
+load(); buildRoad();
+document.body.addEventListener('click',()=>{ try{ getCtx(); }catch(e){} }, {once:true});
+</script>
+<script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js'); }</script>
 </body>
 </html>
