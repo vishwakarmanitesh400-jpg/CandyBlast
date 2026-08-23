@@ -1,275 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Candy Blast - Professional</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff3e8d">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candy Blast PRO</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Baloo+2:wght@700&display=swap');
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Fredoka',sans-serif;background:radial-gradient(circle at top,#fff0f7,#ffc1e3 40%,#8ecbff 100%);min-height:100vh;overflow:hidden}
-  /* HEADER */
- .header{background:linear-gradient(90deg,#ff3e8d,#ff9a2e);padding:10px 12px;display:flex;justify-content:space-between;align-items:center;color:white;box-shadow:0 4px 12px rgba(0,0,0,.2);position:sticky;top:0;z-index:10}
- .logo{font-family:'Baloo 2';font-size:28px;letter-spacing:1px;text-shadow:0 2px 0 #c11a5e,0 3px 6px rgba(0,0,0,.3)}
- .top-stats{display:flex;gap:8px}
- .pill{background:rgba(255,255,255,.95);color:#ff3e8d;border-radius:20px;padding:4px 10px;font-weight:700;display:flex;align-items:center;gap:4px;font-size:14px;box-shadow:0 2px 4px rgba(0,0,0,.15)}
-  /* MAP SCREEN */
-  #mapScreen{height:calc(100vh - 52px);overflow-y:auto;padding:0 0 40px}
- .map-path{position:relative;width:100%;max-width:420px;margin:0 auto;padding:20px 0 100px}
- .path-svg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:0}
- .level-node{position:absolute;z-index:2;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;cursor:pointer;transition:.2s;box-shadow:0 4px 0 rgba(0,0,0,.2),0 6px 12px rgba(0,0,0,.2)}
- .level-node.locked{background:linear-gradient(#b8c0c8,#8a949e);color:#eef}
- .level-node.active{background:radial-gradient(circle at 30% 30%,#ffe77a,#ff9a2e);color:#7a2a00;border:3px solid white;animation:pop 1.2s infinite}
- .level-node.done{background:radial-gradient(circle at 30% 30%,#7aff9a,#00c853)}
- .level-node b{font-size:16px}
- .hut{position:absolute;z-index:1;font-size:28px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
-  @keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-  /* GAME SCREEN */
-  #gameScreen{display:none;flex-direction:column;height:calc(100vh - 52px);max-width:420px;margin:0 auto;background:linear-gradient(#ffffff,#ffe6f2);position:relative}
- .game-top{display:flex;justify-content:space-between;padding:10px 12px;background:white;margin:8px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
- .target{display:flex;gap:8px;align-items:center}
- .candy-mini{width:24px;height:24px;border-radius:6px;display:inline-block}
-  #board{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:8px;background:rgba(255,255,255,.8);margin:0 8px;border-radius:16px;box-shadow:inset 0 2px 8px rgba(0,0,0,.1)}
- .cell{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;user-select:none;transition:transform.15s,scale.15s;box-shadow:0 3px 0 rgba(0,0,0,.15)}
- .cell:active{transform:scale(.9)}
- .c1{background:linear-gradient(#ff7eb3,#ff2d78)}.c2{background:linear-gradient(#7afcff,#00b8d4)}.c3{background:linear-gradient(#a8ff78,#00c853)}.c4{background:linear-gradient(#ffe678,#ffab00)}.c5{background:linear-gradient(#c79bff,#651fff)}.c6{background:linear-gradient(#ff9a8a,#ff3d00)}
- .btn{margin:12px;background:linear-gradient(90deg,#ff3e8d,#ff8a2e);color:white;border:none;padding:12px;border-radius:14px;font-family:'Fredoka';font-size:18px;font-weight:700;box-shadow:0 4px 0 #c11a5e;cursor:pointer}
- .coin-fly{position:fixed;font-size:20px;animation:fly 0.8s forwards;pointer-events:none;z-index:99}
-  @keyframes fly{to{transform:translateY(-120px) translateX(80px);opacity:0}}
+body{margin:0;font-family:Arial;background:linear-gradient(#ff8ec7,#a18cd1);text-align:center}
+.header{background:#fff;padding:15px;font-size:24px;font-weight:bold;color:#ff3e8d}
+.map{padding:20px}
+.level{width:60px;height:60px;background:#fff;border:3px solid #ff3e8d;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin:10px;font-size:22px;font-weight:bold;box-shadow:0 4px 0 #ff3e8d}
+.house{font-size:40px;display:block;margin:20px}
 </style>
 </head>
 <body>
-<div class="header">
-  <div class="logo">CANDY BLAST</div>
-  <div class="top-stats">
-    <div class="pill">🪙 <span id="coinTxt">250</span></div>
-    <div class="pill">❤️ <span id="lifeTxt">5</span></div>
-    <div class="pill" id="musicBtn">🔊</div>
-  </div>
+<div class="header">🍭 CANDY BLAST PRO - 100 LEVELS</div>
+<div class="map">
+<div class="house">🏠 Level 1-10</div>
+<div class="level">1</div><div class="level">2</div><div class="level">3</div><div class="level">4</div><div class="level">5</div><br>
+<div class="level">6</div><div class="level">7</div><div class="level">8</div><div class="level">9</div><div class="level">10</div>
+<div class="house">🏡 Level 11-20</div>
+<div class="level">11</div><div class="level">12</div><div class="level">13</div><div class="level">14</div><div class="level">15</div><br>
+<div class="level">16</div><div class="level">17</div><div class="level">18</div><div class="level">19</div><div class="level">20</div>
+<h2 style="color:#fff;margin-top:30px">✅ Map Load Ho Gaya!</h2>
+<p style="color:#fff">Ab full game code dal denge!</p>
 </div>
-
-<div id="mapScreen"><div class="map-path" id="mapPath">
-  <svg class="path-svg" id="pathSvg"></svg>
-</div></div>
-
-<div id="gameScreen">
-  <div class="game-top">
-    <div><small>MOVES</small><br><b id="moveTxt">20</b></div>
-    <div class="target"><div class="candy-mini c1"></div> x <b id="targetTxt">10</b></div>
-    <div><small>LEVEL</small><br><b id="lvlTxt">1</b></div>
-  </div>
-  <div id="board"></div>
-  <button class="btn" onclick="showMap()">⬅ MAP</button>
-</div>
-
-<audio id="bgMusic" loop><source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a650f4.mp3?filename=happy-kids-109866.mp3" type="audio/mpeg"></audio>
-
-<script>
-let coins = localStorage.getItem('cb_coins')?parseInt(localStorage.getItem('cb_coins')):250;
-let currentLevel=1, moves=20, target=12, board=[], selected=null, musicOn=false;
-let maxLevel = localStorage.getItem('cb_max')?parseInt(localStorage.getItem('cb_max')):1;
-const colors=['c1','c2','c3','c4','c5','c6'];
-const emojis=['🍬','🍭','🍓','🍋','🍇','🍊'];
-
-function initMap(){
-  const map=document.getElementById('mapPath');
-  let html=`<svg class="path-svg" viewBox="0 0 400 3200" id="pathSvg"><path d="" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-dasharray="0" opacity=".9" id="pathLine"/></svg>`;
-  // generate points for 100 levels - zigzag path like Candy Crush
-  let points=[];
-  for(let i=0;i<100;i++){
-    let y = 100 + i*62;
-    let x = 200 + Math.sin(i*0.7)*120 + (i%2?30:-30);
-    points.push({x,y,i:i+1});
-  }
-  // draw path
-  let d=`M ${points[0].x} ${points[0].y}`;
-  for(let i=1;i<points.length;i++) d+=` Q ${points[i-1].x} ${points[i-1].y-30} ${points[i].x} ${points[i].y}`;
-  setTimeout(()=>{document.getElementById('pathLine').setAttribute('d',d)},100);
-
-  // huts every 10 levels
-  points.forEach((p,idx)=>{
-    if((idx+1)%10==0){
-      let hut=document.createElement('div'); hut.className='hut';
-      hut.style.left=(p.x+40)+'px'; hut.style.top=(p.y-10)+'px';
-      hut.innerHTML=['🏠','🏡','🏘️','🏰','🎪'][Math.floor(idx/10)%5];
-      map.appendChild(hut);
-    }
-    let node=document.createElement('div');
-    node.className='level-node '+(p.i>maxLevel?'locked':p.i==maxLevel?'active':'done');
-    node.style.left=(p.x-28)+'px'; node.style.top=p.y+'px';
-    node.innerHTML=`<b>${p.i}</b>`;
-    if(p.i<=maxLevel) node.onclick=()=>startLevel(p.i);
-    map.appendChild(node);
-  });
-  document.getElementById('coinTxt').innerText=coins;
-  map.style.height=(points.length*62+200)+'px';
-}
-function showMap(){ document.getElementById('gameScreen').style.display='none'; document.getElementById('mapScreen').style.display='block'; }
-function startLevel(lvl){
-  currentLevel=lvl; moves=15+Math.floor(lvl/5); target=8+Math.floor(lvl/3);
-  document.getElementById('lvlTxt').innerText=lvl;
-  document.getElementById('moveTxt').innerText=moves;
-  document.getElementById('targetTxt').innerText=target;
-  document.getElementById('mapScreen').style.display='none';
-  document.getElementById('gameScreen').style.display='flex';
-  createBoard(); playPop<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Candy Blast - Pro 100 Levels</title>
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon.png">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Fredoka',sans-serif;background:linear-gradient(180deg,#ff8ec7 0%,#ff3e8d 20%,#a18cd1 60%,#84fab0 100%);min-height:100vh;overflow-x:hidden}
-.header{background:rgba(255,255,255,0.95);padding:10px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.15);border-bottom:3px solid #ff3e8d}
-.logo{font-size:22px;color:#ff3e8d;text-shadow:2px 2px 0 #fff,3px 3px 0 #ff9f1c}
-.coins{background:linear-gradient(135deg,#FFD700,#FFA500);padding:6px 14px;border-radius:20px;color:#6b3a00;font-weight:700;border:2px solid #fff;box-shadow:0 3px 0 #e68a00;display:flex;align-items:center;gap:5px}
-.map-container{position:relative;width:100%;max-width:420px;margin:0 auto;padding:20px 0 80px 0}
-.path-svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none}
-.level-node{position:absolute;width:68px;height:68px;z-index:5;cursor:pointer;transition:transform 0.2s;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.level-node:active{transform:scale(0.9)}
-.level-circle{width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff 0%,#ffc2e0 15%,#ff3e8d 60%);border:4px solid #fff;box-shadow:0 6px 0 #c41e5f,0 8px 15px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;text-shadow:1px 1px 2px rgba(0,0,0,0.5)}
-.level-node.locked.level-circle{background:radial-gradient(circle at 30% 30%,#ccc,#888);border-color:#aaa;box-shadow:0 4px 0 #666;filter:grayscale(0.5)}
-.level-node.active.level-circle{animation:bounce 1.2s infinite;background:radial-gradient(circle at 30% 30%,#fff,#7CFC00,#32CD32);border-color:#fff;box-shadow:0 0 20px #7CFC00,0 6px 0 #228B22}
-.level-num{position:absolute;bottom:-4px;background:#fff;padding:1px 8px;border-radius:10px;font-size:12px;color:#ff3e8d;font-weight:700;border:2px solid #ff3e8d;box-shadow:0 2px 0 #ff3e8d}
-.house{position:absolute;width:50px;height:50px;z-index:3;font-size:38px;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.3));animation:float 3s ease-in-out infinite}
-@keyframes bounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.1)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.coin-pop{position:absolute;font-size:24px;animation:pop 0.8s forwards;z-index:10;pointer-events:none}
-@keyframes pop{0%{transform:translateY(0) scale(0);opacity:1}50%{transform:translateY(-30px) scale(1.3);opacity:1}100%{transform:translateY(-60px) scale(0.5);opacity:0}}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(5px)}
-.modal.show{display:flex}
-.modal-box{background:linear-gradient(180deg,#fff 0%,#ffe6f2 100%);border-radius:25px;padding:25px;width:85%;max-width:320px;text-align:center;border:4px solid #fff;box-shadow:0 15px 40px rgba(0,0,0,0.4);animation:popIn 0.4s cubic-bezier(0.68,-0.55,0.265,1.55)}
-@keyframes popIn{0%{transform:scale(0.5)}100%{transform:scale(1)}}
-.play-btn{background:linear-gradient(180deg,#7CFC00,#32CD32);color:#fff;border:none;padding:12px 35px;border-radius:30px;font-size:18px;font-weight:700;margin-top:15px;border-bottom:4px solid #228B22;cursor:pointer;box-shadow:0 4px 15px rgba(50,205,50,0.4)}
-.game-board{display:none;position:fixed;inset:0;background:linear-gradient(180deg,#ff8ec7,#a18cd1);z-index:150;flex-direction:column;padding:10px}
-.board-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;background:rgba(255,255,255,0.9);padding:10px;border-radius:20px;margin:auto;max-width:360px;box-shadow:0 10px 30px rgba(0,0,0,0.2);border:3px solid #fff}
-.candy{width:100%;aspect-ratio:1;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:all 0.15s;box-shadow:0 3px 0 rgba(0,0,0,0.2);border:2px solid rgba(255,255,255,0.8)}
-.candy.selected{transform:scale(1.15);box-shadow:0 0 20px #fff,0 0 30px #ff3e8d;border-color:#ff3e8d;z-index:2}
-</style>
-</head>
-<body>
-<div class="header">
-<div class="logo">🍭 Candy Blast PRO</div>
-<div class="coins">🪙 <span id="coinCount">250</span></div>
-</div>
-<div class="map-container" id="map" style="height:4200px;">
-<svg class="path-svg" id="pathSvg" viewBox="0 0 400 4200" preserveAspectRatio="none"></svg>
-</div>
-<div class="modal" id="levelModal">
-<div class="modal-box">
-<div style="font-size:50px;">⭐</div>
-<h2 style="color:#ff3e8d;">Level <span id="modalLevel">1</span></h2>
-<p style="color:#666;margin:8px 0;">Target: <b>1000</b> points</p>
-<p style="font-size:13px;color:#888;">3 stars ke liye 2500+ points lao!</p>
-<button class="play-btn" onclick="startGame()">PLAY! 🎮</button><br>
-<button onclick="closeModal()" style="margin-top:12px;background:none;border:none;color:#888;font-weight:600;">CLOSE</button>
-</div>
-</div>
-<div class="game-board" id="gameBoard">
-<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;padding:10px 15px;border-radius:15px;margin-bottom:10px;">
-<div><b>Level <span id="gLevel">1</span></b> | Score: <span id="gScore">0</span></div>
-<div>Moves: <span id="gMoves">20</span></div>
-</div>
-<div class="board-grid" id="board"></div>
-<div style="text-align:center;margin-top:15px;">
-<button onclick="closeGame()" style="background:#ff3e8d;color:#fff;border:none;padding:10px 25px;border-radius:20px;font-weight:700;">❌ Exit Map</button>
-</div>
-</div>
-<script>
-const TOTAL_LEVELS=100;
-const unlockedLevel=parseInt(localStorage.getItem('candy_unlocked')||'1');
-let coins=parseInt(localStorage.getItem('candy_coins')||'250');
-document.getElementById('coinCount').innerText=coins;
-const houses=['🏠','🏡','🏘️','🏚️','🏤','🏫','⛪','🏰','🎪','🍭','🏠','🏡'];
-let houseIndex=0;
-function createMap(){
-const map=document.getElementById('map');
-const svg=document.getElementById('pathSvg');
-let pathD='M 200 50 ';let lastX=200,lastY=50;
-for(let i=1;i<=TOTAL_LEVELS;i++){
-let x,y=50+(i-1)*78;
-if(i%8<4) x=80+(i%4)*75; else x=320-(i%4)*75;
-if(i==1) x=200;
-if(i>1) pathD+=` Q ${(lastX+x)/2} ${lastY+30} ${x} ${y} `;
-lastX=x;lastY=y;
-const node=document.createElement('div');
-node.className='level-node'+(i>unlockedLevel?' locked':'')+(i==unlockedLevel?' active':'');
-node.style.left=(x-34)+'px';node.style.top=y+'px';
-node.innerHTML=`<div class="level-circle">${i>unlockedLevel?'🔒':'🍬'}</div><div class="level-num">${i}</div>`;
-node.onclick=()=>openLevel(i);
-map.appendChild(node);
-if(i%10==0){
-const h=document.createElement('div');h.className='house';
-h.style.left=(x>200?x-80:x+50)+'px';h.style.top=(y-10)+'px';
-h.innerText=houses[houseIndex%houses.length];houseIndex++;
-map.appendChild(h);
-}
-if(i%3==0&&i<=unlockedLevel){
-const c=document.createElement('div');c.style.position='absolute';c.style.left=(x+20)+'px';c.style.top=(y-15)+'px';c.style.fontSize='18px';c.innerText='🪙';c.style.zIndex='2';map.appendChild(c);
-}
-}
-svg.innerHTML=`<path d="${pathD}" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-dasharray="20 15" fill="none" opacity="0.9" stroke-linejoin="round"/><path d="${pathD}" stroke="#ff9f1c" stroke-width="4" fill="none" opacity="0.6"/>`;
-}
-let currentLevel=1;
-function openLevel(lvl){
-if(lvl>unlockedLevel){alert('🔒 Level locked! Pehle Level '+unlockedLevel+' complete karo!');return;}
-currentLevel=lvl;document.getElementById('modalLevel').innerText=lvl;
-document.getElementById('levelModal').classList.add('show');
-}
-function closeModal(){document.getElementById('levelModal').classList.remove('show');}
-let score=0,moves=20,selected=null;
-const candies=['🍬','🍭','🍫','🍩','🍪','🧁'];
-let boardData=[];
-function startGame(){
-closeModal();document.getElementById('gameBoard').style.display='flex';
-document.getElementById('gLevel').innerText=currentLevel;
-score=0;moves=20+Math.floor(currentLevel/5);
-document.getElementById('gScore').innerText=0;document.getElementById('gMoves').innerText=moves;
-generateBoard();
-}
-function closeGame(){document.getElementById('gameBoard').style.display='none';}
-function generateBoard(){
-const board=document.getElementById('board');board.innerHTML='';boardData=[];
-for(let i=0;i<36;i++){
-const type=candies[Math.floor(Math.random()*candies.length)];boardData.push(type);
-const d=document.createElement('div');d.className='candy';d.innerText=type;d.dataset.idx=i;
-d.style.background=`linear-gradient(135deg, ${getColor(type)}, #fff)`;d.onclick=()=>selectCandy(i);board.appendChild(d);
-}
-}
-function getColor(t){return {'🍬':'#ff8ec7','🍭':'#84fab0','🍫':'#a18cd1','🍩':'#f6d365','🍪':'#ff9a9e','🧁':'#ffecd2'}[t]||'#fff';}
-function selectCandy(idx){
-const els=document.querySelectorAll('.candy');
-if(selected===null){selected=idx;els[idx].classList.add('selected');}
-else{
-if(Math.abs(selected-idx)==1||Math.abs(selected-idx)==6){
-[boardData[selected],boardData[idx]]=[boardData[idx],boardData[selected]];
-els[selected].innerText=boardData[selected];els[idx].innerText=boardData[idx];
-els[selected].style.background=`linear-gradient(135deg, ${getColor(boardData[selected])}, #fff)`;
-els[idx].style.background=`linear-gradient(135deg, ${getColor(boardData[idx])}, #fff)`;
-moves--;document.getElementById('gMoves').innerText=moves;checkMatch();
-if(moves<=0) setTimeout(endGame,300);
-}
-els[selected]?.classList.remove('selected');selected=null;
-}
-}
-function checkMatch(){
-let matched=0;
-for(let i=0;i<36;i++){
-if(i%6<4&&boardData[i]==boardData[i+1]&&boardData[i]==boardData[i+2]) matched++;
-if(i<24&&boardData[i]==boardData[i+6]&&boardData[i]==boardData[i+12]) matched++;
-}
-if(matched>0){
-score+=matched*100;document.getElementById('gScore').innerText=score;popCoins(matched);setTimeout(generateBoard,500);
-}
-}
-function popCoins(n){
-const board=document.getElementById('board');
+</body>
+</html>
 for(let i=0;i<n;i++){const c=document.createElement('div');c.className='coin-pop';c.innerText='🪙+10';c.style.left=Math.random()*80+'%';c.style.top='50%';board.appendChild(c);setTimeout(()=>c.remove(),800);}
 }
 function endGame(){
