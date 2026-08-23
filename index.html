@@ -1,94 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Candy Blast 3D - 100 Levels</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+<title>Candy Blast 3D - Candy Crush Style</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Fredoka',Arial;background:linear-gradient(180deg,#ff9ed2 0%,#a78bfa 40%,#60a5fa 100%);min-height:100vh;overflow-x:hidden}
-.header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,#fff 0%,#ffe4f3 100%);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 0 #ff3e8d,0 12px 20px rgba(0,0,0,0.2);border-radius:0 0 18px 18px}
-.logo{font-size:22px;font-weight:700;color:#ff2d7a;text-shadow:2px 2px 0 #fff,4px 4px 0 #ffb3d6}
-.top-coins{background:linear-gradient(180deg,#ffec5c,#ffb700);padding:6px 14px;border-radius:30px;border:3px solid #fff;box-shadow:0 4px 0 #d18a00;font-weight:700}
-.map{max-width:420px;margin:0 auto;padding:10px 12px 120px;position:relative}
-.world-card{background:linear-gradient(180deg,#ffffff 0%,#fff0f7 100%);border-radius:26px;margin:22px 0;padding:16px;border:4px solid #fff;box-shadow:0 10px 0 #e8a0c0,0 18px 30px rgba(0,0,0,0.2);transform:perspective(600px) rotateX(2deg)}
-.world-head{display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:14px}
-.hut-3d{font-size:42px;filter:drop-shadow(0 6px 0 rgba(0,0,0,0.15));animation:float 2s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.world-name{font-size:18px;color:#ff2d7a;text-shadow:1px 1px 0 #fff}
-.path{width:4px;background:repeating-linear-gradient(#fff,#fff 8px,transparent 8px,transparent 16px);position:absolute;left:50%;top:0;bottom:0;opacity:0.5;z-index:-1}
-.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;justify-items:center}
-.lvl{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;cursor:pointer;position:relative;transition:0.15s;transform-style:preserve-3d}
-.lvl::before{content:'';position:absolute;width:100%;height:100%;border-radius:50%;top:6px;left:0;z-index:-1}
-.lvl.unlocked{background:radial-gradient(circle at 30% 30%,#fff 0%,#ff7ab8 40%,#ff2d7a 100%);border:3px solid #fff;color:#fff;text-shadow:0 2px 0 #b80040;box-shadow:0 6px 0 #b80040,0 10px 20px rgba(255,45,122,0.4)}
-.lvl.unlocked::before{background:#b80040;box-shadow:0 2px 0 #7a002a}
-.lvl.locked{background:radial-gradient(circle at 30% 30%,#e5e7eb,#9ca3af);border:3px solid #fff;color:#6b7280;box-shadow:0 6px 0 #6b7280}
-.lvl.locked::before{background:#6b7280}
-.lvl:active{transform:translateY(6px) scale(0.95)}
-.lvl:active::before{top:0}
-.star{position:absolute;top:-6px;right:-4px;font-size:12px}
-.board{position:fixed;inset:0;background:linear-gradient(180deg,#ff9ed2,#7c3aed);z-index:200;display:none;flex-direction:column;padding:12px}
-.board.active{display:flex}
-.grid{width:90vw;max-width:360px;aspect-ratio:1;background:linear-gradient(180deg,#fff,#ffe4f3);margin:20px auto;border-radius:20px;padding:10px;display:grid;grid-template-columns:repeat(8,1fr);gap:6px;border:4px solid #fff;box-shadow:0 12px 0 #e8a0c0,0 20px 40px rgba(0,0,0,0.3)}
-.candy{width:100%;aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;box-shadow:inset 0 -4px 0 rgba(0,0,0,0.2),0 4px 0 rgba(0,0,0,0.15);transition:0.2s;transform:perspective(200px) rotateX(10deg)}
-.candy.selected{transform:translateY(-8px) scale(1.15) rotateX(0);box-shadow:0 12px 20px rgba(0,0,0,0.3)}
-.c-0{background:linear-gradient(#ff7a7a,#ff2d2d)}.c-1{background:linear-gradient(#7aff8a,#2dff4a)}.c-2{background:linear-gradient(#7ab8ff,#2d8aff)}.c-3{background:linear-gradient(#ffeb7a,#ffd82d)}.c-4{background:linear-gradient(#d07aff,#a12dff)}.c-5{background:linear-gradient(#7afff0,#2dffe0)}
-.btn{margin:10px auto;background:linear-gradient(#ffec5c,#ffb700);border:3px solid #fff;border-radius:30px;padding:10px 24px;font-weight:700;box-shadow:0 6px 0 #d18a00}
+body{font-family:'Fredoka',sans-serif;background:#87e1ff;overflow:hidden}
+.header{position:fixed;top:0;width:100%;z-index:100;background:linear-gradient(#fff,#ffd6ec);padding:10px 12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 6px 0 #ff2d7a;border-radius:0 0 18px 18px}
+#scroll{height:100vh;overflow-y:auto;padding-top:70px;background:linear-gradient(180deg,#87e1ff 0%,#a8f0a0 35%,#7dd87d 100%)}
+.world{position:relative;max-width:420px;margin:0 auto;height:4200px}
+.road{position:absolute;left:50%;width:150px;margin-left:-75px;height:100%;background:repeating-linear-gradient(#ffb3d0 0 24px,#fff 24px 48px);border-left:14px solid #ff7aa8;border-right:14px solid #ff7aa8;border-radius:120px;z-index:1}
+.dot{position:absolute;left:50%;width:64px;height:64px;margin-left:-32px;border-radius:50%;border:4px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;z-index:10;box-shadow:0 8px 0 #a8003a,0 15px 25px rgba(0,0,0,.3);cursor:pointer;transform:perspective(400px) rotateX(18deg)}
+.dot.ok{background:radial-gradient(#fff,#ff3d8a 50%,#c0003a)}.dot.lock{background:radial-gradient(#ddd,#666);box-shadow:0 8px 0 #444}
+.dot.cur{animation:bounce.7s infinite alternate}
+@keyframes bounce{to{transform:perspective(400px) rotateX(5deg) translateY(-12px) scale(1.15)}}
+.hut{position:absolute;z-index:5;font-size:54px;filter:drop-shadow(0 6px 0 rgba(0,0,0,.25))}
+#game{position:fixed;inset:0;z-index:200;background:radial-gradient(#ff9ed2,#7c3aed);display:none;flex-direction:column}
+#game.on{display:flex}
+.grid{width:92vw;max-width:360px;aspect-ratio:1;background:linear-gradient(#fff,#ffe6f2);margin:12px auto;border-radius:22px;padding:8px;display:grid;grid-template-columns:repeat(8,1fr);gap:5px;border:4px solid #fff;box-shadow:0 12px 0 #e89ab8,0 25px 50px rgba(0,0,0,.4)}
+.c{aspect-ratio:1;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:inset 0 -5px 0 rgba(0,0,0,.2),0 5px 0 rgba(0,0,0,.15);transform:perspective(300px) rotateX(14deg);transition:.2s}
+.c.sel{transform:translateY(-14px) scale(1.25) rotateX(0);box-shadow:0 16px 30px rgba(0,0,0,.5)}
+.b0{background:linear-gradient(#ff7a7a,#ff1a1a)}.b1{background:linear-gradient(#7aff8a,#00e63a)}.b2{background:linear-gradient(#7ab8ff,#1a8aff)}.b3{background:linear-gradient(#ffec7a,#ffcc00)}.b4{background:linear-gradient(#d78aff,#9d1aff)}.b5{background:linear-gradient(#7affef,#00e6c8)}
 </style>
 </head>
 <body>
-<div class="header"><div class="logo">🍭 CANDY BLAST 3D</div><div class="top-coins">🪙 <span id="coins">250</span></div></div>
-<div class="map" id="map"><div class="path"></div></div>
+<div class="header">
+<div>🍭 CANDY BLAST 3D</div>
+<div style="display:flex;gap:8px">
+<button id="musicBtn" style="background:#fff;border:2px solid #ff2d7a;border-radius:20px;padding:4px 10px">🔊</button>
+<span style="background:gold;padding:5px 10px;border-radius:20px;border:2px solid #fff">🪙 <span id="coin">250</span></span>
+</div>
+</div>
+<div id="scroll"><div class="world" id="world"><div class="road"></div></div></div>
 
-<div class="board" id="board">
-<div style="display:flex;justify-content:space-between;color:#fff;font-weight:700;font-size:18px"><span onclick="closeBoard()" style="background:#fff;color:#ff2d7a;padding:6px 14px;border-radius:20px">⬅️ MAP</span><span>Level <b id="lvlNum">1</b></span><span>⭐ <b id="moves">20</b></span></div>
+<div id="game">
+<div style="display:flex;justify-content:space-between;padding:12px;color:#fff;font-weight:700"><span onclick="closeGame()" style="background:#fff;color:#ff2d7a;padding:6px 14px;border-radius:20px">⬅️ MAP</span><span>LEVEL <b id="lv">1</b></span><span>MOVES <b id="mv">20</b></span></div>
 <div class="grid" id="grid"></div>
-<button class="btn" onclick="closeBoard()">Close & Win (+20 coins)</button>
+<div style="text-align:center;color:#fff;margin-top:10px;font-size:18px">✨ Match 3 Candies ✨<br><small>Drag & Swap</small></div>
 </div>
 
+<audio id="bgm" loop src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_1a2a8f6b8e.mp3"></audio>
 <script>
-let unlocked=parseInt(localStorage.getItem('candy_unlocked')||'1');
-let coins=parseInt(localStorage.getItem('candy_coins')||'250');
-document.getElementById('coins').innerText=coins;
-let worlds=[{n:"🍭 Candy Town",s:1,e:20},{n:"🏡 Sweet Village",s:21,e:40},{n:"🏰 Choco Castle",s:41,e:60},{n:"🎪 Carnival Blast",s:61,e:80},{n:"🌈 Rainbow World",s:81,e:100}];
-let mapHTML='';
-worlds.forEach(w=>{
-mapHTML+=`<div class="world-card"><div class="world-head"><div class="hut-3d">🏠</div><div class="world-name">${w.n} ${w.s}-${w.e}</div></div><div class="levels">`;
-for(let i=w.s;i<=w.e;i++){
-let lock=i>unlocked;
-let cls=lock?'lvl locked':'lvl unlocked';
-let icon=lock?'🔒':i;
-let stars=i<unlocked?'<span class="star">⭐⭐⭐</span>':'';
-mapHTML+=`<div class="${cls}" onclick="openLevel(${i})">${icon}${stars}</div>`;
-}
-mapHTML+=`</div></div>`;
-});
-document.getElementById('map').innerHTML+=mapHTML;
+let unlocked=parseInt(localStorage.getItem('cb3_unlocked')||'1');
+let coins=parseInt(localStorage.getItem('cb3_coins')||'250');
+document.getElementById('coin').innerText=coins;
 
-function openLevel(n){
-if(n>unlocked){alert('🔒 Level '+n+' Locked! Pehle '+unlocked+' complete karo');return}
-document.getElementById('lvlNum').innerText=n;
-document.getElementById('moves').innerText=15+n%10;
-document.getElementById('board').classList.add('active');
-makeBoard();
+// Music
+let bgm=document.getElementById('bgm'); let isPlay=false;
+document.getElementById('musicBtn').onclick=()=>{
+ if(!isPlay){bgm.volume=0.4;bgm.play();document.getElementById('musicBtn').innerText='🔊';isPlay=true}
+ else{bgm.pause();document.getElementById('musicBtn').innerText='🔇';isPlay=false}
+};
+function sfx(freq){try{let ctx=new (window.AudioContext||window.webkitAudioContext)();let o=ctx.createOscillator();let g=ctx.createGain();o.frequency.value=freq;o.connect(g);g.connect(ctx.destination);g.gain.value=0.3;o.start();g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.3);o.stop(ctx.currentTime+0.3)}catch(e){}}
+
+// Build scroll map
+let world=document.getElementById('world');
+let arts=[{x:5,y:150,t:'🍭'},{x:77,y:260,t:'🍄'},{x:7,y:420,t:'🏠'},{x:78,y:560,t:'🌳'},{x:6,y:760,t:'🍭'},{x:76,y:920,t:'🏰'},{x:8,y:1150,t:'🍬'},{x:77,y:1380,t:'🍄'},{x:5,y:1680,t:'🍭'},{x:76,y:1880,t:'🌈'},{x:7,y:2150,t:'🏠'},{x:78,y:2420,t:'🍭'},{x:6,y:2720,t:'🍄'},{x:76,y:3000,t:'👑'},{x:7,y:3350,t:'🍭'}];
+arts.forEach(a=>{let e=document.createElement('div');e.className='hut';e.style.left=a.x+'%';e.style.top=a.y+'px';e.innerText=a.t;world.appendChild(e)});
+for(let i=1;i<=100;i++){
+ let y=4000-(i*38); let zig=(i%3==0?22:i%3==1?-22:0); let x=50+zig;
+ let d=document.createElement('div'); d.className='dot '+(i>unlocked?'lock':(i==unlocked?'ok cur':'ok')); d.style.top=y+'px'; d.style.left=x+'%'; d.innerText=i>unlocked?'🔒':i;
+ d.onclick=()=>{if(i>unlocked){sfx(150);alert('🔒 Locked');return}openGame(i)};
+ world.appendChild(d);
 }
-function closeBoard(){
-let n=parseInt(document.getElementById('lvlNum').innerText);
-if(n==unlocked){unlocked++;localStorage.setItem('candy_unlocked',unlocked);coins+=20;localStorage.setItem('candy_coins',coins);document.getElementById('coins').innerText=coins;}
-document.getElementById('board').classList.remove('active');
-location.reload();
-}
-function makeBoard(){
-let g=document.getElementById('grid');g.innerHTML='';
-for(let i=0;i<64;i++){
-let c=Math.floor(Math.random()*6);
-let d=document.createElement('div');
-d.className='candy c-'+c;
-d.innerHTML=['🍓','🍏','🍬','🍋','🍇','💎'][c];
-d.onclick=()=>{let s=g.querySelector('.selected');if(!s){d.classList.add('selected')}else{if(s!=d){let t=s.innerHTML;let cl=s.className;s.innerHTML=d.innerHTML;s.className=d.className;d.innerHTML=t;d.className=cl}g.querySelectorAll('.candy').forEach(x=>x.classList.remove('selected'))}};
-g.appendChild(d);
-}
+setTimeout(()=>document.getElementById('scroll').scrollTop=4000-(unlocked*38)-300,500);
+
+let cur=1;
+function openGame(n){cur=n;document.getElementById('lv').innerText=n;document.getElementById('mv').innerText=20+Math.floor(n/4);document.getElementById('game').classList.add('on');build();sfx(600);if(!isPlay){bgm.volume=0.4;bgm.play().catch(()=>{});isPlay=true}}
+function closeGame(){document.getElementById('game').classList.remove('on')}
+function win(){if(cur==unlocked){unlocked++;localStorage.setItem('cb3_unlocked',unlocked);coins+=40;localStorage.setItem('cb3_coins',coins);document.getElementById('coin').innerText=coins;}sfx(900);alert('🎉 Level '+cur+' Complete! +40 coins');closeGame();location.reload()}
+
+function build(){
+ let g=document.getElementById('grid');g.innerHTML='';
+ for(let i=0;i<64;i++){
+  let c=Math.floor(Math.random()*6);
+  let el=document.createElement('div');el.className='c b'+c;el.dataset.c=c;el.innerHTML=['🍓','🍏','🔵','🍋','🍇','💎'][c];
+  el.onclick=()=>{
+   let s=g.querySelector('.sel');
+   if(!s){el.classList.add('sel');sfx(400)}
+   else if(s!==el){
+    let t1=el.innerHTML,t2=el.className; el.innerHTML=s.innerHTML;el.className=s.className; s.innerHTML=t1;s.className=t2;
+    g.querySelectorAll('.c').forEach(x=>x.classList.remove('sel'));
+    sfx(700);
+    let mv=document.getElementById('mv');mv.innerText=parseInt(mv.innerText)-1;
+    if(parseInt(mv.innerText)<=0) setTimeout(win,400);
+   }
+  };
+  g.appendChild(el);
+ }
 }
 </script>
 </body>
