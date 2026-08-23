@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Candy Blast</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#ff7eb3,#7b61ff);min-height:100vh;color:#fff;display:flex;justify-content:center;align-items:center;overflow:hidden}
+.game{width:min(100%,480px);min-height:100vh;padding:18px 14px;display:flex;flex-direction:column;justify-content:center}
+h1{text-align:center;font-size:42px;text-shadow:0 4px 8px #0005;margin-bottom:8px}
+.top{display:flex;gap:8px;justify-content:space-between;margin-bottom:14px}
+.card{background:#ffffff22;border:1px solid #ffffff44;border-radius:14px;padding:9px 12px;text-align:center;backdrop-filter:blur(8px);flex:1}
+.card small{display:block;font-size:11px;opacity:.8}.card b{font-size:21px}
+#board{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;background:#ffffff2b;padding:8px;border-radius:18px;box-shadow:0 12px 30px #0004;touch-action:none}
+.candy{aspect-ratio:1;border-radius:25%;border:2px solid #ffffff66;box-shadow:inset 0 3px 4px #fff8,0 3px 5px #0004;cursor:pointer;transition:transform .12s}
+.candy.selected{transform:scale(.82);outline:3px solid #fff;outline-offset:1px}
+.red{background:#ff4d6d}.yellow{background:#ffd43b}.green{background:#35d07f}.blue{background:#3d8bff}.purple{background:#a95cff}.orange{background:#ff963d}
+button{margin:18px auto 0;border:0;border-radius:25px;padding:12px 25px;font-size:16px;font-weight:bold;background:#fff;color:#7b3cff;box-shadow:0 5px 12px #0003}
+#msg{text-align:center;height:22px;margin-top:10px;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="game">
+<h1>🍬 Candy Blast</h1>
+<div class="top">
+<div class="card"><small>SCORE</small><b id="score">0</b></div>
+<div class="card"><small>MOVES</small><b id="moves">30</b></div>
+<div class="card"><small>BEST</small><b id="best">0</b></div>
+</div>
+<div id="board"></div>
+<div id="msg">Match 3 or more candies!</div>
+<button onclick="newGame()">New Game</button>
+</div>
+<script>
+const N=8, colors=["red","yellow","green","blue","purple","orange"];
+let board=[],selected=null,score=0,moves=30,best=Number(localStorage.candyBlastBest||0),busy=false;
+document.getElementById("best").textContent=best;
+
+function randomCandy(){return Math.floor(Math.random()*colors.length)}
+function newGame(){
+ score=0;moves=30;selected=null;busy=false;
+ do{board=Array.from({length:N},()=>Array.from({length:N},randomCandy))}while(findMatches().length);
+ update();draw();message("Match 3 or more candies!");
+}
+function draw(){
+ const el=document.getElementById("board");el.innerHTML="";
+ board.forEach((row,r)=>row.forEach((v,c)=>{
+  const d=document.createElement("div");
+  d.className="candy "+colors[v]+(selected&&selected.r===r&&selected.c===c?" selected":"");
+  d.dataset.r=r;d.dataset.c=c;
+  d.onclick=()=>pick(r,c);el.appendChild(d);
+ }));
+}
+function pick(r,c){
+ if(busy||moves<=0)return;
+ if(!selected){selected={r,c};draw();return}
+ const a=selected;selected=null;
+ if(Math.abs(a.r-r)+Math.abs(a.c-c)!==1){selected={r,c};draw();return}
+ swap(a.r,a.c,r,c);
+ const matches=findMatches();
+ if(!matches.length){swap(a.r,a.c,r,c);message("Try another move!");draw();return}
+ moves--;busy=true;resolve();
+}
+function swap(r1,c1,r2,c2){[board[r1][c1],board[r2][c2]]=[board[r2][c2],board[r1][c1]]}
+function findMatches(){
+ const set=new Set();
+ for(let r=0;r<N;r++){
+  let start=0;
+  for(let c=1;c<=N;c++){
+   if(c<N&&board[r][c]===board[r][start])continue;
+   if(c-start>=3)for(let x=start;x<c;x++)set.add(r*N+x);
+   start=c;
+  }
+ }
+ for(let c=0;c<N;c++){
+  let start=0;
+  for(let r=1;r<=N;r++){
+   if(r<N&&board[r][c]===board[start][c])continue;
+   if(r-start>=3)for(let x=start;x<r;x++)set.add(x*N+c);
+   start=r;
+  }
+ }
+ return [...set].map(x=>[Math.floor(x/N),x%N]);
+}
+async function resolve(){
+ let chain=0;
+ while(true){
+  const m=findMatches();if(!m.length)break;
+  chain++;score+=m.length*10*chain;
+  m.forEach(([r,c])=>board[r][c]=-1);
+  draw();await wait(180);
+  for(let c=0;c<N;c++){
+   let write=N-1;
+   for(let r=N-1;r>=0;r--)if(board[r][c]!==-1)board[write--][c]=board[r][c];
+   for(let r=write;r>=0;r--)board[r][c]=randomCandy();
+  }
+  draw();await wait(180);
+ }
+ busy=false;update();
+ if(moves<=0)message("Game over! Final score: "+score);
+ else message(chain>1?"Combo x"+chain+"!":"Great!");
+}
+function update(){
+ document.getElementById("score").textContent=score;
+ document.getElementById("moves").textContent=moves;
+ if(score>best){best=score;localStorage.candyBlastBest=best}
+ document.getElementById("best").textContent=best;
+}
+function message(t){document.getElementById("msg").textContent=t}
+function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+newGame();
+</script>
+</body>
+</html>
