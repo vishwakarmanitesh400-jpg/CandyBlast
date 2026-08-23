@@ -3,142 +3,177 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Candy Blast - 100 Levels</title>
+<title>Candy Blast - Professional</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#7b2cff">
+<meta name="theme-color" content="#ff3e8d">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Fredoka One',cursive;background:radial-gradient(circle at top,#ff7ac3,#7b2cff,#1a0a3d);min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden}
-.screen{width:390px;height:700px;background:linear-gradient(180deg,rgba(255,255,255,0.22),rgba(255,255,255,0.06));backdrop-filter:blur(25px);border-radius:40px;border:2px solid rgba(255,255,255,0.35);box-shadow:0 25px 60px rgba(0,0,0,0.45);display:none;flex-direction:column;overflow:hidden}
-.screen.active{display:flex;animation:pop 0.45s ease}
-@keyframes pop{0%{transform:scale(0.9);opacity:0}100%{transform:scale(1);opacity:1}}
-.map-header{background:linear-gradient(90deg,#ff3e8d,#ff9a44);padding:18px;text-align:center;color:white;box-shadow:0 5px 15px rgba(0,0,0,0.25)}
-.map-header h1{font-size:30px;letter-spacing:2px;text-shadow:0 3px 0 rgba(0,0,0,0.2)}
-.map-header p{font-size:12px;opacity:0.9;margin-top:4px}
-.map-stats{display:flex;gap:8px;padding:10px;background:rgba(0,0,0,0.18)}
-.mini-box{flex:1;background:white;border-radius:14px;padding:7px;text-align:center;color:#7b2cff}
-.mini-box b{font-size:16px;display:block}.mini-box span{font-size:9px;color:#999}
-.level-road{flex:1;overflow-y:auto;padding:14px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-content:start}
-.level-circle{width:100%;aspect-ratio:1;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 5px 12px rgba(0,0,0,0.3), inset 0 -4px rgba(0,0,0,0.2);transition:0.15s;border:3px solid white;position:relative}
-.level-circle.unlocked{background:linear-gradient(180deg,#fff,#fffa65)}
-.level-circle.locked{background:linear-gradient(180deg,#444,#1a1a1a);color:#888;cursor:not-allowed;border-color:rgba(255,255,255,0.15)}
-.level-circle.current{border-color:#00ffcc;box-shadow:0 0 20px #00ffcc, 0 6px 15px rgba(0,0,0,0.3);animation:glow 1.4s infinite}
-@keyframes glow{0%,100%{box-shadow:0 0 15px #00ffcc}50%{box-shadow:0 0 28px #00ffcc}}
-.level-circle b{font-size:20px;color:#7b2cff}.level-circle.locked b{color:#888}
-.level-circle small{font-size:8px;color:#ff3e8d;margin-top:2px}.level-circle.locked small{color:#666}
-.game-top{background:linear-gradient(90deg,#7b2cff,#ff3e8d);padding:10px;display:flex;justify-content:space-between;color:white}
-.g-box{background:white;color:#7b2cff;border-radius:12px;padding:4px 10px;text-align:center;min-width:58px}
-.g-box span{font-size:9px;display:block;color:#999}.g-box b{font-size:15px}
-#bar{height:10px;background:rgba(0,0,0,0.25)}.progress{height:100%;background:linear-gradient(90deg,#00ffcc,#fffa65);width:0%;transition:width 0.4s}
-.board{margin:10px;background:rgba(0,0,0,0.22);border-radius:20px;padding:8px;display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
-.candy{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;box-shadow:inset 0 -3px rgba(0,0,0,0.22);transition:0.12s;user-select:none}
-.candy.sel{transform:scale(1.18);box-shadow:0 0 14px white}
-.c0{background:#ff4757}.c1{background:#2ed573}.c2{background:#1e90ff}.c3{background:#ffa502}.c4{background:#a55eea}.c5{background:#fffa65}
-.blast{animation:blast 0.28s forwards}@keyframes blast{to{transform:scale(0) rotate(180deg);opacity:0}}
-.btn{width:calc(100% - 20px);margin:8px 10px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:white;padding:11px;border-radius:22px;font-family:inherit;cursor:pointer}
-#win{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:50;color:white;text-align:center;padding:20px}
-.btn-main{background:white;color:#ff3e8d;border:none;padding:14px 42px;border-radius:50px;font-size:20px;font-family:inherit;cursor:pointer;margin:8px;box-shadow:0 8px 22px rgba(0,0,0,0.35)}
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Baloo+2:wght@700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Fredoka',sans-serif;background:radial-gradient(circle at top,#fff0f7,#ffc1e3 40%,#8ecbff 100%);min-height:100vh;overflow:hidden}
+  /* HEADER */
+ .header{background:linear-gradient(90deg,#ff3e8d,#ff9a2e);padding:10px 12px;display:flex;justify-content:space-between;align-items:center;color:white;box-shadow:0 4px 12px rgba(0,0,0,.2);position:sticky;top:0;z-index:10}
+ .logo{font-family:'Baloo 2';font-size:28px;letter-spacing:1px;text-shadow:0 2px 0 #c11a5e,0 3px 6px rgba(0,0,0,.3)}
+ .top-stats{display:flex;gap:8px}
+ .pill{background:rgba(255,255,255,.95);color:#ff3e8d;border-radius:20px;padding:4px 10px;font-weight:700;display:flex;align-items:center;gap:4px;font-size:14px;box-shadow:0 2px 4px rgba(0,0,0,.15)}
+  /* MAP SCREEN */
+  #mapScreen{height:calc(100vh - 52px);overflow-y:auto;padding:0 0 40px}
+ .map-path{position:relative;width:100%;max-width:420px;margin:0 auto;padding:20px 0 100px}
+ .path-svg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:0}
+ .level-node{position:absolute;z-index:2;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;cursor:pointer;transition:.2s;box-shadow:0 4px 0 rgba(0,0,0,.2),0 6px 12px rgba(0,0,0,.2)}
+ .level-node.locked{background:linear-gradient(#b8c0c8,#8a949e);color:#eef}
+ .level-node.active{background:radial-gradient(circle at 30% 30%,#ffe77a,#ff9a2e);color:#7a2a00;border:3px solid white;animation:pop 1.2s infinite}
+ .level-node.done{background:radial-gradient(circle at 30% 30%,#7aff9a,#00c853)}
+ .level-node b{font-size:16px}
+ .hut{position:absolute;z-index:1;font-size:28px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
+  @keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  /* GAME SCREEN */
+  #gameScreen{display:none;flex-direction:column;height:calc(100vh - 52px);max-width:420px;margin:0 auto;background:linear-gradient(#ffffff,#ffe6f2);position:relative}
+ .game-top{display:flex;justify-content:space-between;padding:10px 12px;background:white;margin:8px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+ .target{display:flex;gap:8px;align-items:center}
+ .candy-mini{width:24px;height:24px;border-radius:6px;display:inline-block}
+  #board{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:8px;background:rgba(255,255,255,.8);margin:0 8px;border-radius:16px;box-shadow:inset 0 2px 8px rgba(0,0,0,.1)}
+ .cell{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;user-select:none;transition:transform.15s,scale.15s;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+ .cell:active{transform:scale(.9)}
+ .c1{background:linear-gradient(#ff7eb3,#ff2d78)}.c2{background:linear-gradient(#7afcff,#00b8d4)}.c3{background:linear-gradient(#a8ff78,#00c853)}.c4{background:linear-gradient(#ffe678,#ffab00)}.c5{background:linear-gradient(#c79bff,#651fff)}.c6{background:linear-gradient(#ff9a8a,#ff3d00)}
+ .btn{margin:12px;background:linear-gradient(90deg,#ff3e8d,#ff8a2e);color:white;border:none;padding:12px;border-radius:14px;font-family:'Fredoka';font-size:18px;font-weight:700;box-shadow:0 4px 0 #c11a5e;cursor:pointer}
+ .coin-fly{position:fixed;font-size:20px;animation:fly 0.8s forwards;pointer-events:none;z-index:99}
+  @keyframes fly{to{transform:translateY(-120px) translateX(80px);opacity:0}}
 </style>
 </head>
 <body>
-
-<div id="mapScreen" class="screen active">
-  <div class="map-header">
-    <h1>🍬 CANDY BLAST</h1>
-    <p>100 LEVELS • TAP TO PLAY • MUSIC CHANGES EVERY 10 LEVELS</p>
+<div class="header">
+  <div class="logo">CANDY BLAST</div>
+  <div class="top-stats">
+    <div class="pill">🪙 <span id="coinTxt">250</span></div>
+    <div class="pill">❤️ <span id="lifeTxt">5</span></div>
+    <div class="pill" id="musicBtn">🔊</div>
   </div>
-  <div class="map-stats">
-    <div class="mini-box"><span>UNLOCKED</span><b id="unlockedTxt">1/100</b></div>
-    <div class="mini-box"><span>SCORE</span><b id="totalTxt">0</b></div>
-    <div class="mini-box"><span>MUSIC</span><b id="themeTxt">Sweet</b></div>
-  </div>
-  <div class="level-road" id="road"></div>
-  <button class="btn" onclick="toggleMusic()">🔊 Music: <span id="musicBtnTxt">ON</span> • Sound: <span id="soundBtnTxt">ON</span></button>
 </div>
 
-<div id="gameScreen" class="screen">
+<div id="mapScreen"><div class="map-path" id="mapPath">
+  <svg class="path-svg" id="pathSvg"></svg>
+</div></div>
+
+<div id="gameScreen">
   <div class="game-top">
-    <div class="g-box"><span>LEVEL</span><b id="lvl">1</b></div>
-    <div class="g-box"><span>MOVES</span><b id="moves">20</b></div>
-    <div class="g-box"><span>SCORE</span><b id="score">0</b></div>
+    <div><small>MOVES</small><br><b id="moveTxt">20</b></div>
+    <div class="target"><div class="candy-mini c1"></div> x <b id="targetTxt">10</b></div>
+    <div><small>LEVEL</small><br><b id="lvlTxt">1</b></div>
   </div>
-  <div style="background:white;color:#7b2cff;text-align:center;padding:6px;font-size:11px">TARGET: <b id="target">500</b> • 🎵 <span id="musicName">Sweet</span> • <span id="lvlTheme">1-10</span></div>
-  <div id="bar"><div class="progress" id="progress"></div></div>
-  <div class="board" id="board"></div>
-  <button class="btn" onclick="showMap()">⬅️ Back to Map</button>
+  <div id="board"></div>
+  <button class="btn" onclick="showMap()">⬅ MAP</button>
 </div>
 
-<div id="win">
-  <div style="font-size:70px" id="winEmoji">🎉</div>
-  <h1 id="winTitle" style="font-size:32px;margin-top:10px"></h1>
-  <p id="winText" style="margin:12px 0;opacity:0.85"></p>
-  <button class="btn-main" onclick="nextLevel()">Next Level ➡️</button>
-  <button class="btn-main" style="background:rgba(255,255,255,0.2);color:white;font-size:16px" onclick="showMap()">🗺️ Level Map</button>
-</div>
+<audio id="bgMusic" loop><source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a650f4.mp3?filename=happy-kids-109866.mp3" type="audio/mpeg"></audio>
 
 <script>
-const emojis=['🍬','🍏','💎','🍊','🍓','🍋'];
-const THEMES=[
-  {name:"Sweet", notes:[262,330,392,523], tempo:420, range:"1-10"},
-  {name:"Jungle", notes:[196,247,294,330,392], tempo:340, range:"11-20"},
-  {name:"Space", notes:[330,370,440,550,660], tempo:300, range:"21-30"},
-  {name:"Party", notes:[262,294,330,392,440,523,587], tempo:230, range:"31-40"},
-  {name:"Ice", notes:[523,659,784,659,523], tempo:480, range:"41-50"},
-  {name:"Fire", notes:[200,240,300,400,500,600], tempo:190, range:"51-60"},
-  {name:"Night", notes:[220,262,330,262,196], tempo:580, range:"61-70"},
-  {name:"Electric", notes:[440,500,600,700,800], tempo:170, range:"71-80"},
-  {name:"Champion", notes:[392,440,494,523,587,659,784], tempo:210, range:"81-90"},
-  {name:"Legend", notes:[262,392,523,784,1046], tempo:195, range:"91-100"}
-];
+let coins = localStorage.getItem('cb_coins')?parseInt(localStorage.getItem('cb_coins')):250;
+let currentLevel=1, moves=20, target=12, board=[], selected=null, musicOn=false;
+let maxLevel = localStorage.getItem('cb_max')?parseInt(localStorage.getItem('cb_max')):1;
+const colors=['c1','c2','c3','c4','c5','c6'];
+const emojis=['🍬','🍭','🍓','🍋','🍇','🍊'];
 
-let board=[], score=0, level=1, moves=20, target=500, sel=null, maxUnlocked=1, total=0;
-let musicOn=true, soundOn=true, ctx=null, timer=null;
+function initMap(){
+  const map=document.getElementById('mapPath');
+  let html=`<svg class="path-svg" viewBox="0 0 400 3200" id="pathSvg"><path d="" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-dasharray="0" opacity=".9" id="pathLine"/></svg>`;
+  // generate points for 100 levels - zigzag path like Candy Crush
+  let points=[];
+  for(let i=0;i<100;i++){
+    let y = 100 + i*62;
+    let x = 200 + Math.sin(i*0.7)*120 + (i%2?30:-30);
+    points.push({x,y,i:i+1});
+  }
+  // draw path
+  let d=`M ${points[0].x} ${points[0].y}`;
+  for(let i=1;i<points.length;i++) d+=` Q ${points[i-1].x} ${points[i-1].y-30} ${points[i].x} ${points[i].y}`;
+  setTimeout(()=>{document.getElementById('pathLine').setAttribute('d',d)},100);
 
-function getCtx(){ if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)(); if(ctx.state==='suspended') ctx.resume(); return ctx; }
-function playTone(freq,type,vol,dur){ if(!soundOn) return; try{ const c=getCtx(); const o=c.createOscillator(), g=c.createGain(); o.type=type; o.frequency.value=freq; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(vol,c.currentTime); g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur); o.start(); o.stop(c.currentTime+dur);}catch(e){} }
-function load(){ maxUnlocked=parseInt(localStorage.getItem('candy_max')||1); total=parseInt(localStorage.getItem('candy_score')||0); document.getElementById('unlockedTxt').textContent=maxUnlocked+'/100'; document.getElementById('totalTxt').textContent=total; }
-function save(){ localStorage.setItem('candy_max',maxUnlocked); localStorage.setItem('candy_score',total); }
-function showMap(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('mapScreen').classList.add('active'); buildRoad(); load(); clearInterval(timer); }
-function showGame(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('gameScreen').classList.add('active'); }
-function getTheme(lv){ return THEMES[Math.min(Math.floor((lv-1)/10),9)]; }
-
-function buildRoad(){
-  let road=document.getElementById('road'); road.innerHTML='';
-  for(let i=1;i<=100;i++){
-    let th=THEMES[Math.floor((i-1)/10)];
-    let d=document.createElement('div');
-    d.className='level-circle '+(i>maxUnlocked?'locked':i===maxUnlocked?'current':'unlocked');
-    d.innerHTML='<b>'+(i>maxUnlocked?'🔒':i)+'</b><small>'+th.name+'</small>';
-    if(i<=maxUnlocked) d.onclick=()=>{ startLevel(i); };
-    road.appendChild(d);
+  // huts every 10 levels
+  points.forEach((p,idx)=>{
+    if((idx+1)%10==0){
+      let hut=document.createElement('div'); hut.className='hut';
+      hut.style.left=(p.x+40)+'px'; hut.style.top=(p.y-10)+'px';
+      hut.innerHTML=['🏠','🏡','🏘️','🏰','🎪'][Math.floor(idx/10)%5];
+      map.appendChild(hut);
+    }
+    let node=document.createElement('div');
+    node.className='level-node '+(p.i>maxLevel?'locked':p.i==maxLevel?'active':'done');
+    node.style.left=(p.x-28)+'px'; node.style.top=p.y+'px';
+    node.innerHTML=`<b>${p.i}</b>`;
+    if(p.i<=maxLevel) node.onclick=()=>startLevel(p.i);
+    map.appendChild(node);
+  });
+  document.getElementById('coinTxt').innerText=coins;
+  map.style.height=(points.length*62+200)+'px';
+}
+function showMap(){ document.getElementById('gameScreen').style.display='none'; document.getElementById('mapScreen').style.display='block'; }
+function startLevel(lvl){
+  currentLevel=lvl; moves=15+Math.floor(lvl/5); target=8+Math.floor(lvl/3);
+  document.getElementById('lvlTxt').innerText=lvl;
+  document.getElementById('moveTxt').innerText=moves;
+  document.getElementById('targetTxt').innerText=target;
+  document.getElementById('mapScreen').style.display='none';
+  document.getElementById('gameScreen').style.display='flex';
+  createBoard(); playPop();
+}
+function createBoard(){
+  board=[]; const b=document.getElementById('board'); b.innerHTML='';
+  for(let r=0;r<8;r++){ board[r]=[];
+    for(let c=0;c<8;c++){
+      let t=Math.floor(Math.random()*6);
+      board[r][c]=t;
+      let cell=document.createElement('div'); cell.className='cell '+colors[t];
+      cell.innerHTML=emojis[t]; cell.dataset.r=r; cell.dataset.c=c;
+      cell.onclick=()=>selectCell(r,c,cell);
+      b.appendChild(cell);
+    }
   }
 }
-
-function playMusic(){
-  clearInterval(timer); if(!musicOn) return;
-  let th=getTheme(level);
-  document.getElementById('musicName').textContent=th.name;
-  document.getElementById('themeTxt').textContent=th.name;
-  document.getElementById('lvlTheme').textContent=th.range;
-  let i=0;
-  timer=setInterval(()=>{
-    if(!musicOn) return;
-    try{
-      const c=getCtx(); const o=c.createOscillator(), g=c.createGain();
-      o.frequency.value=th.notes[i%th.notes.length];
-      o.type=level<30?'triangle':level<70?'sine':'sawtooth';
-      o.connect(g); g.connect(c.destination);
-      g.gain.setValueAtTime(0.07,c.currentTime); g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.45);
-      o.start(); o.stop(c.currentTime+0.45); i++;
-    }catch(e){}
-  }, th.tempo);
+function selectCell(r,c,el){
+  if(!selected){ selected={r,c,el}; el.style.transform='scale(1.2)'; return; }
+  // swap if adjacent
+  if(Math.abs(selected.r-r)+Math.abs(selected.c-c)==1){
+    let tmp=board[selected.r][selected.c]; board[selected.r][selected.c]=board[r][c]; board[r][c]=tmp;
+    selected.el.innerHTML=emojis[board[selected.r][selected.c]]; selected.el.className='cell '+colors[board[selected.r][selected.c]];
+    el.innerHTML=emojis[board[r][c]]; el.className='cell '+colors[board[r][c]];
+    moves--; document.getElementById('moveTxt').innerText=moves;
+    playPop();
+    setTimeout(checkMatch,200);
+  }
+  selected.el.style.transform='scale(1)'; selected=null;
+  if(moves<=0) setTimeout(()=>{ alert('Try Again! ❤️ -1'); showMap(); },300);
 }
-function toggleMusic(){
-  if(event && event.target.id==='mapScreen') return;
-  // Toggle both
-  if(musicOn || soundOn){ // simple toggle
-    // If clicking map button - toggle music
+function checkMatch(){
+  let matched=0;
+  // simple check: if 3 same in a row, remove
+  for(let r=0;r<8;r++) for(let c=0;c<6;c++) if(board[r][c]==board[r][c+1] && board[r][c]==board[r][c+2]) matched++;
+  for(let c=0;c<8;c++) for(let r=0;r<6;r++) if(board[r][c]==board[r+1][c] && board[r][c]==board[r+2][c]) matched++;
+  if(matched>0){
+    target-=matched; document.getElementById('targetTxt').innerText=Math.max(0,target);
+    coins+=matched*5; localStorage.setItem('cb_coins',coins); document.getElementById('coinTxt').innerText=coins;
+    // coin animation
+    for(let k=0;k<matched;k++){ let f=document.createElement('div'); f.className='coin-fly'; f.innerText='🪙+5'; f.style.left=Math.random()*80+10+'%'; f.style.top='60%'; document.body.appendChild(f); setTimeout(()=>f.remove(),800); }
+    if(target<=0){
+      if(currentLevel==maxLevel){ maxLevel++; localStorage.setItem('cb_max',maxLevel); }
+      setTimeout(()=>{ alert('Yummy! Level '+currentLevel+' Complete! 🪙 +50'); coins+=50; localStorage.setItem('cb_coins',coins); showMap(); initMap(); },400);
+    }
+  }
+}
+function playPop(){
+  if(!musicOn) return;
+  let ctx=new (window.AudioContext||window.webkitAudioContext)();
+  let o=ctx.createOscillator(); o.frequency.value=600+Math.random()*400; o.connect(ctx.destination); o.start(); setTimeout(()=>o.stop(),120);
+}
+document.getElementById('musicBtn').onclick=function(){
+  musicOn=!musicOn; this.innerText=musicOn?'🔊':'🔇';
+  let a=document.getElementById('bgMusic'); if(musicOn){ a.play().catch(()=>{}); } else a.pause();
+  playPop();
+};
+initMap();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+</script>
+</body>
+</html>    // If clicking map button - toggle music
     musicOn=!musicOn; soundOn=musicOn;
   }
   document.getElementById('musicBtnTxt').textContent=musicOn?'ON':'OFF';
