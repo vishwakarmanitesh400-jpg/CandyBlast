@@ -1,13 +1,15 @@
 {
-  "name": "Candy Blast",
-  "short_name": "CandyBlast",
+  "name": "Candy Blast - Pro",
+  "short_name": "Candy Blast",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#c084fc",
-  "theme_color": "#a855f7",
-  "icons": [{
-    "src": "https://cdn-icons-png.flaticon.com/512/590/590685.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }]
+  "background_color": "#ff3e8d",
+  "theme_color": "#ff3e8d",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
