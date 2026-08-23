@@ -114,129 +114,174 @@ function startLevel(lvl){
   document.getElementById('targetTxt').innerText=target;
   document.getElementById('mapScreen').style.display='none';
   document.getElementById('gameScreen').style.display='flex';
-  createBoard(); playPop();
+  createBoard(); playPop<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Candy Blast - Pro 100 Levels</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Fredoka',sans-serif;background:linear-gradient(180deg,#ff8ec7 0%,#ff3e8d 20%,#a18cd1 60%,#84fab0 100%);min-height:100vh;overflow-x:hidden}
+.header{background:rgba(255,255,255,0.95);padding:10px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.15);border-bottom:3px solid #ff3e8d}
+.logo{font-size:22px;color:#ff3e8d;text-shadow:2px 2px 0 #fff,3px 3px 0 #ff9f1c}
+.coins{background:linear-gradient(135deg,#FFD700,#FFA500);padding:6px 14px;border-radius:20px;color:#6b3a00;font-weight:700;border:2px solid #fff;box-shadow:0 3px 0 #e68a00;display:flex;align-items:center;gap:5px}
+.map-container{position:relative;width:100%;max-width:420px;margin:0 auto;padding:20px 0 80px 0}
+.path-svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.level-node{position:absolute;width:68px;height:68px;z-index:5;cursor:pointer;transition:transform 0.2s;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.level-node:active{transform:scale(0.9)}
+.level-circle{width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff 0%,#ffc2e0 15%,#ff3e8d 60%);border:4px solid #fff;box-shadow:0 6px 0 #c41e5f,0 8px 15px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;text-shadow:1px 1px 2px rgba(0,0,0,0.5)}
+.level-node.locked.level-circle{background:radial-gradient(circle at 30% 30%,#ccc,#888);border-color:#aaa;box-shadow:0 4px 0 #666;filter:grayscale(0.5)}
+.level-node.active.level-circle{animation:bounce 1.2s infinite;background:radial-gradient(circle at 30% 30%,#fff,#7CFC00,#32CD32);border-color:#fff;box-shadow:0 0 20px #7CFC00,0 6px 0 #228B22}
+.level-num{position:absolute;bottom:-4px;background:#fff;padding:1px 8px;border-radius:10px;font-size:12px;color:#ff3e8d;font-weight:700;border:2px solid #ff3e8d;box-shadow:0 2px 0 #ff3e8d}
+.house{position:absolute;width:50px;height:50px;z-index:3;font-size:38px;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.3));animation:float 3s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.coin-pop{position:absolute;font-size:24px;animation:pop 0.8s forwards;z-index:10;pointer-events:none}
+@keyframes pop{0%{transform:translateY(0) scale(0);opacity:1}50%{transform:translateY(-30px) scale(1.3);opacity:1}100%{transform:translateY(-60px) scale(0.5);opacity:0}}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(5px)}
+.modal.show{display:flex}
+.modal-box{background:linear-gradient(180deg,#fff 0%,#ffe6f2 100%);border-radius:25px;padding:25px;width:85%;max-width:320px;text-align:center;border:4px solid #fff;box-shadow:0 15px 40px rgba(0,0,0,0.4);animation:popIn 0.4s cubic-bezier(0.68,-0.55,0.265,1.55)}
+@keyframes popIn{0%{transform:scale(0.5)}100%{transform:scale(1)}}
+.play-btn{background:linear-gradient(180deg,#7CFC00,#32CD32);color:#fff;border:none;padding:12px 35px;border-radius:30px;font-size:18px;font-weight:700;margin-top:15px;border-bottom:4px solid #228B22;cursor:pointer;box-shadow:0 4px 15px rgba(50,205,50,0.4)}
+.game-board{display:none;position:fixed;inset:0;background:linear-gradient(180deg,#ff8ec7,#a18cd1);z-index:150;flex-direction:column;padding:10px}
+.board-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;background:rgba(255,255,255,0.9);padding:10px;border-radius:20px;margin:auto;max-width:360px;box-shadow:0 10px 30px rgba(0,0,0,0.2);border:3px solid #fff}
+.candy{width:100%;aspect-ratio:1;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:all 0.15s;box-shadow:0 3px 0 rgba(0,0,0,0.2);border:2px solid rgba(255,255,255,0.8)}
+.candy.selected{transform:scale(1.15);box-shadow:0 0 20px #fff,0 0 30px #ff3e8d;border-color:#ff3e8d;z-index:2}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo">🍭 Candy Blast PRO</div>
+<div class="coins">🪙 <span id="coinCount">250</span></div>
+</div>
+<div class="map-container" id="map" style="height:4200px;">
+<svg class="path-svg" id="pathSvg" viewBox="0 0 400 4200" preserveAspectRatio="none"></svg>
+</div>
+<div class="modal" id="levelModal">
+<div class="modal-box">
+<div style="font-size:50px;">⭐</div>
+<h2 style="color:#ff3e8d;">Level <span id="modalLevel">1</span></h2>
+<p style="color:#666;margin:8px 0;">Target: <b>1000</b> points</p>
+<p style="font-size:13px;color:#888;">3 stars ke liye 2500+ points lao!</p>
+<button class="play-btn" onclick="startGame()">PLAY! 🎮</button><br>
+<button onclick="closeModal()" style="margin-top:12px;background:none;border:none;color:#888;font-weight:600;">CLOSE</button>
+</div>
+</div>
+<div class="game-board" id="gameBoard">
+<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;padding:10px 15px;border-radius:15px;margin-bottom:10px;">
+<div><b>Level <span id="gLevel">1</span></b> | Score: <span id="gScore">0</span></div>
+<div>Moves: <span id="gMoves">20</span></div>
+</div>
+<div class="board-grid" id="board"></div>
+<div style="text-align:center;margin-top:15px;">
+<button onclick="closeGame()" style="background:#ff3e8d;color:#fff;border:none;padding:10px 25px;border-radius:20px;font-weight:700;">❌ Exit Map</button>
+</div>
+</div>
+<script>
+const TOTAL_LEVELS=100;
+const unlockedLevel=parseInt(localStorage.getItem('candy_unlocked')||'1');
+let coins=parseInt(localStorage.getItem('candy_coins')||'250');
+document.getElementById('coinCount').innerText=coins;
+const houses=['🏠','🏡','🏘️','🏚️','🏤','🏫','⛪','🏰','🎪','🍭','🏠','🏡'];
+let houseIndex=0;
+function createMap(){
+const map=document.getElementById('map');
+const svg=document.getElementById('pathSvg');
+let pathD='M 200 50 ';let lastX=200,lastY=50;
+for(let i=1;i<=TOTAL_LEVELS;i++){
+let x,y=50+(i-1)*78;
+if(i%8<4) x=80+(i%4)*75; else x=320-(i%4)*75;
+if(i==1) x=200;
+if(i>1) pathD+=` Q ${(lastX+x)/2} ${lastY+30} ${x} ${y} `;
+lastX=x;lastY=y;
+const node=document.createElement('div');
+node.className='level-node'+(i>unlockedLevel?' locked':'')+(i==unlockedLevel?' active':'');
+node.style.left=(x-34)+'px';node.style.top=y+'px';
+node.innerHTML=`<div class="level-circle">${i>unlockedLevel?'🔒':'🍬'}</div><div class="level-num">${i}</div>`;
+node.onclick=()=>openLevel(i);
+map.appendChild(node);
+if(i%10==0){
+const h=document.createElement('div');h.className='house';
+h.style.left=(x>200?x-80:x+50)+'px';h.style.top=(y-10)+'px';
+h.innerText=houses[houseIndex%houses.length];houseIndex++;
+map.appendChild(h);
 }
-function createBoard(){
-  board=[]; const b=document.getElementById('board'); b.innerHTML='';
-  for(let r=0;r<8;r++){ board[r]=[];
-    for(let c=0;c<8;c++){
-      let t=Math.floor(Math.random()*6);
-      board[r][c]=t;
-      let cell=document.createElement('div'); cell.className='cell '+colors[t];
-      cell.innerHTML=emojis[t]; cell.dataset.r=r; cell.dataset.c=c;
-      cell.onclick=()=>selectCell(r,c,cell);
-      b.appendChild(cell);
-    }
-  }
+if(i%3==0&&i<=unlockedLevel){
+const c=document.createElement('div');c.style.position='absolute';c.style.left=(x+20)+'px';c.style.top=(y-15)+'px';c.style.fontSize='18px';c.innerText='🪙';c.style.zIndex='2';map.appendChild(c);
 }
-function selectCell(r,c,el){
-  if(!selected){ selected={r,c,el}; el.style.transform='scale(1.2)'; return; }
-  // swap if adjacent
-  if(Math.abs(selected.r-r)+Math.abs(selected.c-c)==1){
-    let tmp=board[selected.r][selected.c]; board[selected.r][selected.c]=board[r][c]; board[r][c]=tmp;
-    selected.el.innerHTML=emojis[board[selected.r][selected.c]]; selected.el.className='cell '+colors[board[selected.r][selected.c]];
-    el.innerHTML=emojis[board[r][c]]; el.className='cell '+colors[board[r][c]];
-    moves--; document.getElementById('moveTxt').innerText=moves;
-    playPop();
-    setTimeout(checkMatch,200);
-  }
-  selected.el.style.transform='scale(1)'; selected=null;
-  if(moves<=0) setTimeout(()=>{ alert('Try Again! ❤️ -1'); showMap(); },300);
+}
+svg.innerHTML=`<path d="${pathD}" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-dasharray="20 15" fill="none" opacity="0.9" stroke-linejoin="round"/><path d="${pathD}" stroke="#ff9f1c" stroke-width="4" fill="none" opacity="0.6"/>`;
+}
+let currentLevel=1;
+function openLevel(lvl){
+if(lvl>unlockedLevel){alert('🔒 Level locked! Pehle Level '+unlockedLevel+' complete karo!');return;}
+currentLevel=lvl;document.getElementById('modalLevel').innerText=lvl;
+document.getElementById('levelModal').classList.add('show');
+}
+function closeModal(){document.getElementById('levelModal').classList.remove('show');}
+let score=0,moves=20,selected=null;
+const candies=['🍬','🍭','🍫','🍩','🍪','🧁'];
+let boardData=[];
+function startGame(){
+closeModal();document.getElementById('gameBoard').style.display='flex';
+document.getElementById('gLevel').innerText=currentLevel;
+score=0;moves=20+Math.floor(currentLevel/5);
+document.getElementById('gScore').innerText=0;document.getElementById('gMoves').innerText=moves;
+generateBoard();
+}
+function closeGame(){document.getElementById('gameBoard').style.display='none';}
+function generateBoard(){
+const board=document.getElementById('board');board.innerHTML='';boardData=[];
+for(let i=0;i<36;i++){
+const type=candies[Math.floor(Math.random()*candies.length)];boardData.push(type);
+const d=document.createElement('div');d.className='candy';d.innerText=type;d.dataset.idx=i;
+d.style.background=`linear-gradient(135deg, ${getColor(type)}, #fff)`;d.onclick=()=>selectCandy(i);board.appendChild(d);
+}
+}
+function getColor(t){return {'🍬':'#ff8ec7','🍭':'#84fab0','🍫':'#a18cd1','🍩':'#f6d365','🍪':'#ff9a9e','🧁':'#ffecd2'}[t]||'#fff';}
+function selectCandy(idx){
+const els=document.querySelectorAll('.candy');
+if(selected===null){selected=idx;els[idx].classList.add('selected');}
+else{
+if(Math.abs(selected-idx)==1||Math.abs(selected-idx)==6){
+[boardData[selected],boardData[idx]]=[boardData[idx],boardData[selected]];
+els[selected].innerText=boardData[selected];els[idx].innerText=boardData[idx];
+els[selected].style.background=`linear-gradient(135deg, ${getColor(boardData[selected])}, #fff)`;
+els[idx].style.background=`linear-gradient(135deg, ${getColor(boardData[idx])}, #fff)`;
+moves--;document.getElementById('gMoves').innerText=moves;checkMatch();
+if(moves<=0) setTimeout(endGame,300);
+}
+els[selected]?.classList.remove('selected');selected=null;
+}
 }
 function checkMatch(){
-  let matched=0;
-  // simple check: if 3 same in a row, remove
-  for(let r=0;r<8;r++) for(let c=0;c<6;c++) if(board[r][c]==board[r][c+1] && board[r][c]==board[r][c+2]) matched++;
-  for(let c=0;c<8;c++) for(let r=0;r<6;r++) if(board[r][c]==board[r+1][c] && board[r][c]==board[r+2][c]) matched++;
-  if(matched>0){
-    target-=matched; document.getElementById('targetTxt').innerText=Math.max(0,target);
-    coins+=matched*5; localStorage.setItem('cb_coins',coins); document.getElementById('coinTxt').innerText=coins;
-    // coin animation
-    for(let k=0;k<matched;k++){ let f=document.createElement('div'); f.className='coin-fly'; f.innerText='🪙+5'; f.style.left=Math.random()*80+10+'%'; f.style.top='60%'; document.body.appendChild(f); setTimeout(()=>f.remove(),800); }
-    if(target<=0){
-      if(currentLevel==maxLevel){ maxLevel++; localStorage.setItem('cb_max',maxLevel); }
-      setTimeout(()=>{ alert('Yummy! Level '+currentLevel+' Complete! 🪙 +50'); coins+=50; localStorage.setItem('cb_coins',coins); showMap(); initMap(); },400);
-    }
-  }
+let matched=0;
+for(let i=0;i<36;i++){
+if(i%6<4&&boardData[i]==boardData[i+1]&&boardData[i]==boardData[i+2]) matched++;
+if(i<24&&boardData[i]==boardData[i+6]&&boardData[i]==boardData[i+12]) matched++;
 }
-function playPop(){
-  if(!musicOn) return;
-  let ctx=new (window.AudioContext||window.webkitAudioContext)();
-  let o=ctx.createOscillator(); o.frequency.value=600+Math.random()*400; o.connect(ctx.destination); o.start(); setTimeout(()=>o.stop(),120);
+if(matched>0){
+score+=matched*100;document.getElementById('gScore').innerText=score;popCoins(matched);setTimeout(generateBoard,500);
 }
-document.getElementById('musicBtn').onclick=function(){
-  musicOn=!musicOn; this.innerText=musicOn?'🔊':'🔇';
-  let a=document.getElementById('bgMusic'); if(musicOn){ a.play().catch(()=>{}); } else a.pause();
-  playPop();
-};
-initMap();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+}
+function popCoins(n){
+const board=document.getElementById('board');
+for(let i=0;i<n;i++){const c=document.createElement('div');c.className='coin-pop';c.innerText='🪙+10';c.style.left=Math.random()*80+'%';c.style.top='50%';board.appendChild(c);setTimeout(()=>c.remove(),800);}
+}
+function endGame(){
+if(score>=1000){
+coins+=20+currentLevel*2;localStorage.setItem('candy_coins',coins);document.getElementById('coinCount').innerText=coins;
+if(currentLevel==unlockedLevel&&currentLevel<TOTAL_LEVELS){localStorage.setItem('candy_unlocked',currentLevel+1);alert('🎉 Level '+currentLevel+' COMPLETE! 🪙 +'+(20+currentLevel*2)+' coins!');location.reload();}
+else alert('🎉 You Win! Score: '+score);
+}else alert('😢 Try Again! Score: '+score+' (Need 1000)');
+closeGame();
+}
+createMap();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 </script>
-</body>
-</html>    // If clicking map button - toggle music
-    musicOn=!musicOn; soundOn=musicOn;
-  }
-  document.getElementById('musicBtnTxt').textContent=musicOn?'ON':'OFF';
-  document.getElementById('soundBtnTxt').textContent=soundOn?'ON':'OFF';
-  if(musicOn){ playMusic(); } else { clearInterval(timer); }
-}
-
-function getData(lv){ return {target:380+lv*155+Math.floor(lv/10)*380, moves:Math.max(10,26-Math.floor(lv/8))}; }
-function startLevel(lv){
-  getCtx(); level=lv; let d=getData(lv); target=d.target; moves=d.moves; score=0; sel=null;
-  document.getElementById('lvl').textContent=lv;
-  document.getElementById('target').textContent=target;
-  document.getElementById('moves').textContent=moves;
-  document.getElementById('score').textContent=0;
-  document.getElementById('progress').style.width='0%';
-  board=[]; for(let i=0;i<64;i++) board.push(Math.floor(Math.random()*6));
-  draw(); showGame(); playMusic(); setTimeout(checkMatches,250);
-}
-function draw(){ let el=document.getElementById('board'); el.innerHTML=''; board.forEach((c,i)=>{ let d=document.createElement('div'); d.className='candy c'+c; d.textContent=emojis[c]; if(sel===i) d.classList.add('sel'); d.onclick=()=>click(i); el.appendChild(d); }); }
-function click(i){
-  if(moves<=0) return; getCtx();
-  if(sel===null){ sel=i; playTone(700,'sine',0.25,0.12); draw(); }
-  else{
-    let r1=Math.floor(sel/8),c1=sel%8,r2=Math.floor(i/8),c2=i%8;
-    if(Math.abs(r1-r2)+Math.abs(c1-c2)===1){
-      [board[sel],board[i]]=[board[i],board[sel]];
-      if(!hasMatch()){ [board[sel],board[i]]=[board[i],board[sel]]; playTone(150,'square',0.2,0.15); sel=null; }
-      else{ moves--; document.getElementById('moves').textContent=moves; playTone(850,'sine',0.35,0.18); sel=null; draw(); setTimeout(checkMatches,180); }
-    } else { sel=i; }
-    draw();
-  }
-}
-function hasMatch(){ for(let r=0;r<8;r++) for(let c=0;c<6;c++){ let idx=r*8+c; if(board[idx]===board[idx+1]&&board[idx]===board[idx+2]) return true; } for(let r=0;r<6;r++) for(let c=0;c<8;c++){ let idx=r*8+c; if(board[idx]===board[idx+8]&&board[idx]===board[idx+16]) return true; } return false; }
-function checkMatches(){
-  let m=new Set();
-  for(let r=0;r<8;r++) for(let c=0;c<6;c++){ let i=r*8+c; if(board[i]===board[i+1]&&board[i]===board[i+2]){ m.add(i); m.add(i+1); m.add(i+2); } }
-  for(let r=0;r<6;r++) for(let c=0;c<8;c++){ let i=r*8+c; if(board[i]===board[i+8]&&board[i]===board[i+16]){ m.add(i); m.add(i+8); m.add(i+16); } }
-  if(m.size>0){
-    score+=m.size*20; document.getElementById('score').textContent=score;
-    document.getElementById('progress').style.width=Math.min(100,score/target*100)+'%';
-    m.forEach(i=>{ let el=document.getElementById('board').children[i]; if(el) el.classList.add('blast'); });
-    playTone(500+Math.random()*300,'sine',0.35,0.2);
-    setTimeout(()=>{
-      m.forEach(i=>board[i]=Math.floor(Math.random()*6)); draw();
-      if(score>=target){ win(); } else { setTimeout(checkMatches,200); }
-      if(moves<=0 && score<target){ setTimeout(()=>{ alert('Moves Khatam! Level '+level+' Restart'); startLevel(level); },300); }
-    },280);
-  }
-}
-function win(){
-  total+=score; if(level>=maxUnlocked) maxUnlocked=Math.min(100,level+1); save();
-  document.getElementById('win').style.display='flex';
-  document.getElementById('winEmoji').textContent=level>=100?'🏆':'🎉';
-  document.getElementById('winTitle').textContent=level>=100?'YOU ARE LEGEND! 100 LEVELS!':'Level '+level+' Complete!';
-  let nextTh=level<100?getTheme(level+1).name:'Legend';
-  document.getElementById('winText').textContent='Score: '+score+' / '+target+' | Next Music: '+nextTh+' 🎵';
-  clearInterval(timer); playTone(600,'sine',0.4,0.3); setTimeout(()=>playTone(800,'sine',0.4,0.4),200); setTimeout(()=>playTone(1000,'sine',0.4,0.6),400);
-}
-function nextLevel(){ document.getElementById('win').style.display='none'; if(level<100) level++; else level=1; startLevel(level); }
-
-load(); buildRoad();
-document.body.addEventListener('click',()=>{ try{ getCtx(); }catch(e){} }, {once:true});
-</script>
-<script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js'); }</script>
 </body>
 </html>
