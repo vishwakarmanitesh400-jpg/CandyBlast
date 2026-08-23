@@ -1,192 +1,522 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Candy Blast - Touch & Slide Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candy Blast - Real Match 3 Game</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; touch-action: none; }
-        body { background: #120826; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-        
-        .screen { display: none; width: 100%; max-width: 420px; height: 100vh; max-height: 850px; flex-direction: column; align-items: center; position: relative; background-size: cover; background-position: center; border: 2px solid #555; border-radius: 20px; overflow: hidden; }
-        .active { display: flex; }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body {
+            background: #110926;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #fff;
+        }
+        #game-container {
+            width: 400px;
+            background: linear-gradient(180deg, #2b1254 0%, #4a1c82 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,255,255,0.2);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+        }
+        /* Top Header */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 12px;
+        }
+        .stats-box { font-weight: bold; font-size: 14px; text-shadow: 1px 1px 2px #000; }
+        .stats-box span { color: #ffd700; font-size: 16px; }
 
-        /* Splash Screen */
-        #splash-screen { background-image: url('36318.png'); justify-content: flex-end; padding-bottom: 50px; }
-        .play-btn { background: linear-gradient(180deg, #ff9800, #f57c00); border: 3px solid #fff; padding: 15px 50px; font-size: 24px; font-weight: bold; color: white; border-radius: 30px; cursor: pointer; box-shadow: 0 8px 0 #b26a00; text-shadow: 1px 1px 2px #000; }
+        /* Level Banner */
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            background: linear-gradient(90deg, #e91e63, #9c27b0);
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
 
-        /* Map Screen */
-        #map-screen { background: linear-gradient(180deg, #4a148c, #880e4f); padding: 20px; overflow-y: auto; }
-        .map-title { font-size: 22px; font-weight: bold; margin-bottom: 20px; }
-        .levels-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; width: 100%; padding-bottom: 30px; }
-        .level-node { width: 65px; height: 65px; background: linear-gradient(180deg, #00e676, #00a152); border: 3px solid #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; font-weight: bold; box-shadow: 0 5px 0 #006000; cursor: pointer; }
-        .level-node.locked { background: #555; box-shadow: 0 5px 0 #333; opacity: 0.6; cursor: not-allowed; }
+        /* Canvas Game Board */
+        #canvas-wrapper {
+            position: relative;
+            width: 370px;
+            height: 370px;
+            margin: 0 auto;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        }
+        canvas {
+            border-radius: 15px;
+            touch-action: none;
+        }
 
-        /* Game Screen */
-        #game-screen { background-image: url('36298_2.jpg'); justify-content: space-between; padding: 20px 10px; }
-        .hud { width: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); padding: 10px 15px; border-radius: 15px; display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; border: 2px solid #ff4081; }
-        #board { display: grid; grid-template-columns: repeat(6, 55px); grid-template-rows: repeat(6, 55px); gap: 5px; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 12px; border: 3px solid #fff; position: relative; }
-        .candy { width: 55px; height: 55px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 28px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); user-select: none; }
+        /* Bottom Boosters */
+        .boosters {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 5px;
+        }
+        .btn-booster {
+            background: linear-gradient(180deg, #ff9800, #f57c00);
+            border: 2px solid #fff;
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            transition: transform 0.1s;
+        }
+        .btn-booster:active { transform: scale(0.95); }
+
+        /* Level Map Overlay Modal */
+        #map-modal {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 6, 31, 0.95);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 100;
+        }
+        #map-modal.hidden { display: none; }
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-height: 420px;
+            overflow-y: auto;
+            margin-top: 15px;
+            padding-right: 5px;
+        }
+        .level-node {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(145deg, #00bcd4, #00838f);
+            border: 3px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        .level-node.locked {
+            background: #555;
+            border-color: #888;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
 
-    <div id="splash-screen" class="screen active">
-        <button class="play-btn" onclick="goToMap()">PLAY</button>
+<div id="game-container">
+    <!-- Top Stats Bar -->
+    <div class="top-bar">
+        <div class="stats-box">❤️ Lives: <span>5</span></div>
+        <div class="stats-box">🪙 Coins: <span>1,200</span></div>
+        <button class="btn-booster" id="map-btn">🗺️ Map</button>
     </div>
 
-    <div id="map-screen" class="screen">
-        <div class="map-title">SELECT LEVEL (1-100)</div>
-        <div class="levels-grid" id="levels-container"></div>
+    <!-- Target & Level Header -->
+    <div class="level-info">
+        <div>LEVEL: <span id="lvl-num">1</span>/100</div>
+        <div>MOVES: <span id="moves-left">20</span></div>
+        <div>SCORE: <span id="score-val">0</span></div>
     </div>
 
-    <div id="game-screen" class="screen">
-        <div class="hud">
-            <div>LVL: <span id="lvl-num">1</span></div>
-            <div>SCORE: <span id="score">0</span></div>
-            <div>MOVES: <span id="moves">15</span></div>
-        </div>
-
-        <div id="board"></div>
-
-        <button class="play-btn" style="font-size:16px; padding:10px 20px;" onclick="goToMap()">← MAP</button>
+    <!-- Main Game Board Canvas -->
+    <div id="canvas-wrapper">
+        <canvas id="gameCanvas" width="370" height="370"></canvas>
     </div>
 
-    <script>
-        const width = 6;
-        let score = 0;
-        let moves = 15;
-        let audioCtx;
-        const candyTypes = ['🍬', '🍭', '🍩', '🍫', '🧁'];
-        let grid = [];
-        
-        let startX = 0, startY = 0;
-        let draggedCandy = null;
+    <!-- Power-up Boosters -->
+    <div class="boosters">
+        <button class="btn-booster" onclick="triggerBooster('hammer')">🔨 Hammer (x3)</button>
+        <button class="btn-booster" onclick="triggerBooster('bomb')">💣 Bomb (x2)</button>
+        <button class="btn-booster" onclick="triggerBooster('shuffle')">🔀 Shuffle (x1)</button>
+    </div>
 
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                startBGM();
-            }
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+    <!-- 100 Level Map Modal -->
+    <div id="map-modal" class="hidden">
+        <h2>Select Level (1 - 100)</h2>
+        <div class="map-grid" id="map-grid"></div>
+        <button class="btn-booster" style="margin-top: 15px;" id="close-map">Close Map</button>
+    </div>
+</div>
+
+<script>
+    // --- Audio Sound Engine (Synthesizer via Web Audio API) ---
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+        if (!audioCtx) audioCtx = new AudioCtx();
+    }
+
+    function playSound(type) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+        if (type === 'swipe') {
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.exponentialRampToValueAtTime(150, now + 0.1);
+            gain.gain.setValueAtTime(0.3, now);
+            gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+            osc.start(now);
+            osc.stop(now + 0.1);
+        } else if (type === 'pop') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(500, now);
+            osc.frequency.exponentialRampToValueAtTime(1000, now + 0.15);
+            gain.gain.setValueAtTime(0.5, now);
+            gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+            osc.start(now);
+            osc.stop(now + 0.15);
         }
+    }
 
-        function playSound(freq, duration=0.1) {
-            if (!audioCtx) return;
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + duration);
-        }
+    // --- Game Logic Constants ---
+    const GRID_SIZE = 7;
+    const CELL_SIZE = 370 / GRID_SIZE;
+    const CANDY_TYPES = [
+        { color: '#e91e63', name: 'Red' },     // Heart
+        { color: '#ffeb3b', name: 'Yellow' },  // Lemon
+        { color: '#2196f3', name: 'Blue' },    // Soda
+        { color: '#4caf50', name: 'Green' },   // Square
+        { color: '#9c27b0', name: 'Purple' }   // Jelly
+    ];
 
-        function startBGM() {
-            const notes = [261, 329, 392, 523];
-            let i = 0;
-            setInterval(() => {
-                if (audioCtx) playSound(notes[i++ % notes.length], 0.2);
-            }, 400);
-        }
+    let canvas = document.getElementById('gameCanvas');
+    let ctx = canvas.getContext('2d');
 
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
+    let grid = [];
+    let currentLevel = 1;
+    let moves = 20;
+    let score = 0;
+    let particles = [];
 
-        function goToMap() {
-            initAudio();
-            showScreen('map-screen');
-            renderMap();
-        }
+    // Drag / Slide tracking state
+    let dragStart = null;
+    let isSwapping = false;
 
-        function renderMap() {
-            const container = document.getElementById('levels-container');
-            container.innerHTML = '';
-            for (let i = 1; i <= 100; i++) {
-                let btn = document.createElement('div');
-                btn.className = 'level-node' + (i > 5 ? ' locked' : '');
-                btn.innerText = i;
-                if (i <= 5) btn.onclick = () => startGame(i);
-                container.appendChild(btn);
-            }
-        }
-
-        function startGame(lvl) {
-            score = 0;
-            moves = 15;
-            document.getElementById('lvl-num').innerText = lvl;
-            document.getElementById('score').innerText = score;
-            document.getElementById('moves').innerText = moves;
-            showScreen('game-screen');
-            createBoard();
-        }
-
-        function createBoard() {
-            const board = document.getElementById('board');
-            board.innerHTML = '';
-            grid = [];
-            for (let i = 0; i < width * width; i++) {
-                let candy = document.createElement('div');
-                candy.className = 'candy';
-                candy.innerText = candyTypes[Math.floor(Math.random() * candyTypes.length)];
-                candy.setAttribute('data-id', i);
-                
-                // Touch Slide Controls
-                candy.addEventListener('touchstart', handleStart);
-                candy.addEventListener('touchend', handleEnd);
-                candy.addEventListener('mousedown', handleStart);
-                candy.addEventListener('mouseup', handleEnd);
-
-                board.appendChild(candy);
-                grid.push(candy);
+    // --- Initialize Grid ---
+    function initGrid() {
+        grid = [];
+        for (let r = 0; r < GRID_SIZE; r++) {
+            grid[r] = [];
+            for (let c = 0; c < GRID_SIZE; c++) {
+                grid[r][c] = getRandomCandy();
             }
         }
+        removeInitialMatches();
+    }
 
-        function handleStart(e) {
-            if (moves <= 0) return;
-            draggedCandy = this;
-            let touch = e.touches ? e.touches[0] : e;
-            startX = touch.clientX;
-            startY = touch.clientY;
+    function getRandomCandy() {
+        const typeIndex = Math.floor(Math.random() * CANDY_TYPES.length);
+        return { type: typeIndex, yOffset: 0 };
+    }
+
+    function removeInitialMatches() {
+        // Prevent starting with pre-matched 3s
+        for (let r = 0; r < GRID_SIZE; r++) {
+            for (let c = 0; c < GRID_SIZE; c++) {
+                while (
+                    (c >= 2 && grid[r][c].type === grid[r][c-1].type && grid[r][c].type === grid[r][c-2].type) ||
+                    (r >= 2 && grid[r][c].type === grid[r-1][c].type && grid[r][c].type === grid[r-2][c].type)
+                ) {
+                    grid[r][c] = getRandomCandy();
+                }
+            }
+        }
+    }
+
+    // --- Drawing Engine (3D Style Render) ---
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Grid Cells
+        for (let r = 0; r < GRID_SIZE; r++) {
+            for (let c = 0; c < GRID_SIZE; c++) {
+                ctx.fillStyle = (r + c) % 2 === 0 ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.1)';
+                ctx.fillRect(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+
+                let candy = grid[r][c];
+                if (candy) {
+                    drawCandy(c * CELL_SIZE + CELL_SIZE / 2, r * CELL_SIZE + CELL_SIZE / 2, candy.type);
+                }
+            }
         }
 
-        function handleEnd(e) {
-            if (!draggedCandy) return;
-            let touch = e.changedTouches ? e.changedTouches[0] : e;
-            let diffX = touch.clientX - startX;
-            let diffY = touch.clientY - startY;
+        // Render Burst Particles
+        drawParticles();
+        requestAnimationFrame(draw);
+    }
 
-            let id = parseInt(draggedCandy.getAttribute('data-id'));
-            let targetId = null;
+    function drawCandy(x, y, type) {
+        const radius = CELL_SIZE / 2 - 6;
+        const color = CANDY_TYPES[type].color;
 
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                if (diffX > 30 && id % width !== width - 1) targetId = id + 1; // Right
-                else if (diffX < -30 && id % width !== 0) targetId = id - 1; // Left
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+
+        // 3D Gradient styling
+        let grad = ctx.createRadialGradient(x - 5, y - 5, 2, x, y, radius);
+        grad.addColorStop(0, '#ffffff');
+        grad.addColorStop(0.3, color);
+        grad.addColorStop(1, adjustColor(color, -40));
+
+        ctx.fillStyle = grad;
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetY = 4;
+        ctx.fill();
+        ctx.restore();
+    }
+
+    function adjustColor(col, amt) {
+        let usePound = false;
+        if (col[0] == "#") { col = col.slice(1); usePound = true; }
+        let num = parseInt(col,16);
+        let r = (num >> 16) + amt;
+        let b = ((num >> 8) & 0x00FF) + amt;
+        let g = (num & 0x0000FF) + amt;
+        return (usePound?"#":"") + (0x1000000 + (r<255?r<1?0:r:255)*0x10000 + (b<255?b<1?0:b:255)*0x100 + (g<255?g<1?0:g:255)).toString(16).slice(1);
+    }
+
+    // --- Slide / Drag Controls ---
+    canvas.addEventListener('pointerdown', (e) => {
+        initAudio();
+        if (isSwapping || moves <= 0) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        dragStart = {
+            col: Math.floor(x / CELL_SIZE),
+            row: Math.floor(y / CELL_SIZE),
+            x: x,
+            y: y
+        };
+    });
+
+    canvas.addEventListener('pointerup', (e) => {
+        if (!dragStart || isSwapping) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const dx = x - dragStart.x;
+        const dy = y - dragStart.y;
+
+        // Minimum slide threshold distance
+        if (Math.abs(dx) > 20 || Math.abs(dy) > 20) {
+            let targetRow = dragStart.row;
+            let targetCol = dragStart.col;
+
+            if (Math.abs(dx) > Math.abs(dy)) {
+                targetCol += dx > 0 ? 1 : -1; // Horizontal Slide
             } else {
-                if (diffY > 30 && id + width < 36) targetId = id + width; // Down
-                else if (diffY < -30 && id - width >= 0) targetId = id - width; // Up
+                targetRow += dy > 0 ? 1 : -1; // Vertical Slide
             }
 
-            if (targetId !== null) {
-                swap(draggedCandy, grid[targetId]);
-                moves--;
-                score += 10;
-                document.getElementById('moves').innerText = moves;
-                document.getElementById('score').innerText = score;
-                playSound(600);
+            if (targetRow >= 0 && targetRow < GRID_SIZE && targetCol >= 0 && targetCol < GRID_SIZE) {
+                attemptSwap(dragStart.row, dragStart.col, targetRow, targetCol);
             }
-            draggedCandy = null;
+        }
+        dragStart = null;
+    });
+
+    // --- Swap & Match Core Mechanics ---
+    async function attemptSwap(r1, c1, r2, c2) {
+        isSwapping = true;
+        playSound('swipe');
+
+        // Swap state
+        let temp = grid[r1][c1];
+        grid[r1][c1] = grid[r2][c2];
+        grid[r2][c2] = temp;
+
+        let matches = checkMatches();
+        if (matches.length > 0) {
+            moves--;
+            document.getElementById('moves-left').innerText = moves;
+            await processMatches(matches);
+        } else {
+            // Revert back if no match found
+            await new Promise(res => setTimeout(res, 200));
+            temp = grid[r1][c1];
+            grid[r1][c1] = grid[r2][c2];
+            grid[r2][c2] = temp;
+        }
+        isSwapping = false;
+    }
+
+    function checkMatches() {
+        let matched = new Set();
+
+        // Horizontal matches
+        for (let r = 0; r < GRID_SIZE; r++) {
+            for (let c = 0; c < GRID_SIZE - 2; c++) {
+                let type = grid[r][c]?.type;
+                if (type !== undefined && type === grid[r][c+1]?.type && type === grid[r][c+2]?.type) {
+                    matched.add(`${r},${c}`);
+                    matched.add(`${r},${c+1}`);
+                    matched.add(`${r},${c+2}`);
+                }
+            }
         }
 
-        function swap(c1, c2) {
-            let temp = c1.innerText;
-            c1.innerText = c2.innerText;
-            c2.innerText = temp;
+        // Vertical matches
+        for (let c = 0; c < GRID_SIZE; c++) {
+            for (let r = 0; r < GRID_SIZE - 2; r++) {
+                let type = grid[r][c]?.type;
+                if (type !== undefined && type === grid[r+1][c]?.type && type === grid[r+2][c]?.type) {
+                    matched.add(`${r},${c}`);
+                    matched.add(`${r+1},${c}`);
+                    matched.add(`${r+2},${c}`);
+                }
+            }
         }
-    </script>
+
+        return Array.from(matched).map(coord => {
+            let [r, c] = coord.split(',').map(Number);
+            return { r, c };
+        });
+    }
+
+    async function processMatches(matches) {
+        playSound('pop');
+
+        matches.forEach(m => {
+            createBurst(m.c * CELL_SIZE + CELL_SIZE / 2, m.r * CELL_SIZE + CELL_SIZE / 2, grid[m.r][m.c].type);
+            grid[m.r][m.c] = null;
+            score += 60;
+        });
+
+        document.getElementById('score-val').innerText = score;
+        await new Promise(res => setTimeout(res, 250));
+
+        // Cascade Gravity Drop
+        for (let c = 0; c < GRID_SIZE; c++) {
+            let emptyRow = GRID_SIZE - 1;
+            for (let r = GRID_SIZE - 1; r >= 0; r--) {
+                if (grid[r][c] !== null) {
+                    grid[emptyRow][c] = grid[r][c];
+                    if (emptyRow !== r) grid[r][c] = null;
+                    emptyRow--;
+                }
+            }
+            for (let r = emptyRow; r >= 0; r--) {
+                grid[r][c] = getRandomCandy();
+            }
+        }
+
+        let newMatches = checkMatches();
+        if (newMatches.length > 0) {
+            await new Promise(res => setTimeout(res, 200));
+            await processMatches(newMatches); // Chain Combo Cascade
+        }
+    }
+
+    // --- Candy Explosion Particle Effects ---
+    function createBurst(x, y, type) {
+        const color = CANDY_TYPES[type].color;
+        for (let i = 0; i < 12; i++) {
+            particles.push({
+                x: x, y: y,
+                vx: (Math.random() - 0.5) * 8,
+                vy: (Math.random() - 0.5) * 8,
+                radius: Math.random() * 4 + 2,
+                color: color,
+                life: 20
+            });
+        }
+    }
+
+    function drawParticles() {
+        particles.forEach((p, index) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.life--;
+
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (p.life <= 0) particles.splice(index, 1);
+        });
+    }
+
+    // --- Booster Actions ---
+    function triggerBooster(type) {
+        if (type === 'shuffle') {
+            initGrid();
+            playSound('swipe');
+        } else {
+            alert(type.toUpperCase() + " Booster Activated!");
+        }
+    }
+
+    // --- 100 Level Map Modal Controller ---
+    const mapModal = document.getElementById('map-modal');
+    const mapGrid = document.getElementById('map-grid');
+
+    document.getElementById('map-btn').onclick = () => {
+        mapGrid.innerHTML = '';
+        for (let i = 1; i <= 100; i++) {
+            let node = document.createElement('div');
+            node.className = `level-node ${i > currentLevel ? 'locked' : ''}`;
+            node.innerText = i;
+            node.onclick = () => {
+                if (i <= currentLevel) {
+                    currentLevel = i;
+                    document.getElementById('lvl-num').innerText = currentLevel;
+                    moves = 20;
+                    score = 0;
+                    document.getElementById('moves-left').innerText = moves;
+                    document.getElementById('score-val').innerText = score;
+                    initGrid();
+                    mapModal.classList.add('hidden');
+                }
+            };
+            mapGrid.appendChild(node);
+        }
+        mapModal.classList.remove('hidden');
+    };
+
+    document.getElementById('close-map').onclick = () => mapModal.classList.add('hidden');
+
+    // Start Game
+    initGrid();
+    draw();
+</script>
 </body>
 </html>
