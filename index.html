@@ -1,43 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Candy Blast PRO</title>
+<title>Candy Blast PRO - 100 Levels</title>
 <style>
-body{margin:0;font-family:Arial;background:linear-gradient(#ff8ec7,#a18cd1);text-align:center}
-.header{background:#fff;padding:15px;font-size:24px;font-weight:bold;color:#ff3e8d}
-.map{padding:20px}
-.level{width:60px;height:60px;background:#fff;border:3px solid #ff3e8d;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin:10px;font-size:22px;font-weight:bold;box-shadow:0 4px 0 #ff3e8d}
-.house{font-size:40px;display:block;margin:20px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:linear-gradient(#ff8ec7,#a18cd1);min-height:100vh}
+.header{background:#fff;padding:12px;display:flex;justify-content:space-between;position:sticky;top:0;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+.logo{color:#ff3e8d;font-weight:700;font-size:18px}
+.coins{background:gold;padding:5px 12px;border-radius:20px;font-weight:700}
+.map{max-width:420px;margin:0 auto;padding:15px 10px 100px}
+.world{background:#fff;border-radius:20px;padding:15px;margin:18px 0}
+.world-title{text-align:center;color:#ff3e8d;font-weight:700;margin-bottom:12px;font-size:18px}
+.levels{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.lvl{width:56px;height:56px;background:#fff;border:3px solid #ff3e8d;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 4px 0 #c41e5f}
+.lvl.locked{background:#ddd;border-color:#999;color:#777}
+.hut{text-align:center;font-size:36px}
 </style>
 </head>
 <body>
-<div class="header">🍭 CANDY BLAST PRO - 100 LEVELS</div>
-<div class="map">
-<div class="house">🏠 Level 1-10</div>
-<div class="level">1</div><div class="level">2</div><div class="level">3</div><div class="level">4</div><div class="level">5</div><br>
-<div class="level">6</div><div class="level">7</div><div class="level">8</div><div class="level">9</div><div class="level">10</div>
-<div class="house">🏡 Level 11-20</div>
-<div class="level">11</div><div class="level">12</div><div class="level">13</div><div class="level">14</div><div class="level">15</div><br>
-<div class="level">16</div><div class="level">17</div><div class="level">18</div><div class="level">19</div><div class="level">20</div>
-<h2 style="color:#fff;margin-top:30px">✅ Map Load Ho Gaya!</h2>
-<p style="color:#fff">Ab full game code dal denge!</p>
-</div>
-</body>
-</html>
-for(let i=0;i<n;i++){const c=document.createElement('div');c.className='coin-pop';c.innerText='🪙+10';c.style.left=Math.random()*80+'%';c.style.top='50%';board.appendChild(c);setTimeout(()=>c.remove(),800);}
-}
-function endGame(){
-if(score>=1000){
-coins+=20+currentLevel*2;localStorage.setItem('candy_coins',coins);document.getElementById('coinCount').innerText=coins;
-if(currentLevel==unlockedLevel&&currentLevel<TOTAL_LEVELS){localStorage.setItem('candy_unlocked',currentLevel+1);alert('🎉 Level '+currentLevel+' COMPLETE! 🪙 +'+(20+currentLevel*2)+' coins!');location.reload();}
-else alert('🎉 You Win! Score: '+score);
-}else alert('😢 Try Again! Score: '+score+' (Need 1000)');
-closeGame();
-}
-createMap();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+<div class="header"><div class="logo">🍭 CANDY BLAST PRO</div><div class="coins">🪙 250</div></div>
+<div class="map" id="map"></div>
+<script>
+let unlocked=parseInt(localStorage.getItem('candy_unlocked')||'1');
+let worlds=[{t:"🏠 Candy Town 1-20",s:1,e:20},{t:"🏡 Sweet Village 21-40",s:21,e:40},{t:"🏰 Chocolate Castle 41-60",s:41,e:60},{t:"🎪 Carnival 61-80",s:61,e:80},{t:"🍭 Rainbow 81-100",s:81,e:100}];
+let h="";
+worlds.forEach(w=>{
+h+=`<div class="world"><div class="hut">🏠</div><div class="world-title">${w.t}</div><div class="levels">`;
+for(let i=w.s;i<=w.e;i++){let c=i>unlocked?"lvl locked":"lvl";let txt=i>unlocked?"🔒":i;h+=`<div class="${c}" onclick="if(${i}>unlocked)alert('Locked');else{alert('Level ${i} Play!');if(${i}==unlocked){localStorage.setItem('candy_unlocked',${i}+1);location.reload()}}">${txt}</div>`}
+h+=`</div></div>`;
+});
+document.getElementById('map').innerHTML=h;
 </script>
 </body>
 </html>
