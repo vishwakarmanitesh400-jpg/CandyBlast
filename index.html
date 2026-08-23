@@ -1,1 +1,1386 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Candy World 3D</title><style>@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap');*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Fredoka',sans-serif;overflow:hidden}#scroll{height:100vh;overflow-y:auto;padding-top:60px;background:linear-gradient(#87e1ff,#7dd87d)}.world{position:relative;max-width:430px;margin:0 auto;height:2800px;background:url(https://i.imgur.com/8Km9tLL.jpg) no-repeat top center;background-size:100% 100%;background-color:#7dd87d}.dot{position:absolute;width:62px;height:62px;border-radius:50%;border:4px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:18px;z-index:10;box-shadow:0 7px 0 rgba(0,0,0,.4),0 12px 25px rgba(0,0,0,.5);cursor:pointer;transform:perspective(400px) rotateX(18deg)}.dot.ok{background:radial-gradient(circle at 30% 30%,#fff,#ff3d8a 50%,#c0003a)}.dot.lock{background:radial-gradient(#ddd,#666)}.dot.cur{animation:pop .7s infinite alternate}@keyframes pop{to{transform:perspective(400px) rotateX(6deg) translateY(-10px) scale(1.15)}}</style></head><body><div style="position:fixed;top:0;left:0;right:0;z-index:100;background:linear-gradient(#fff,#ffd0e8);padding:10px 14px;display:flex;justify-content:space-between;box-shadow:0 5px 0 #ff2d7a;border-radius:0 0 18px 18px;font-family:'Fredoka',sans-serif"><b>🍭 CANDY WORLD 3D</b><span style="background:gold;padding:5px 10px;border-radius:20px;border:2px solid #fff">LVL <span id="lvl">1</span></span></div><div id="scroll"><div class="world" id="world"></div></div><script>let unlocked=parseInt(localStorage.getItem('cb3')||'1');let path=[{l:1,x:47,y:96},{l:2,x:52,y:91},{l:3,x:60,y:87},{l:4,x:68,y:82.5},{l:5,x:60,y:77.5},{l:6,x:48,y:73.5},{l:7,x:40,y:68},{l:8,x:48,y:62},{l:9,x:60,y:57},{l:10,x:68,y:52},{l:11,x:58,y:47.5},{l:12,x:45,y:44},{l:13,x:42,y:38.5},{l:14,x:52,y:34},{l:15,x:48,y:28},{l:16,x:48,y:22},{l:17,x:50,y:16},{l:18,x:51,y:10},{l:19,x:50,y:5},{l:20,x:50,y:1.5}];let w=document.getElementById('world');path.forEach(p=>{let d=document.createElement('div');d.className='dot '+(p.l>unlocked?'lock':(p.l==unlocked?'ok cur':'ok'));d.style.left=p.x+'%';d.style.top=p.y+'%';d.style.marginLeft='-31px';d.style.marginTop='-31px';d.innerText=p.l>unlocked?'🔒':p.l;d.onclick=()=>{if(p.l>unlocked){alert('Locked');return}if(p.l==unlocked){localStorage.setItem('cb3',unlocked+1);alert('Level '+p.l+' Win! Next unlocked');location.reload()}else alert('Level '+p.l+' Play!')};w.appendChild(d)});setTimeout(()=>{document.getElementById('scroll').scrollTop=document.getElementById('scroll').scrollHeight;document.getElementById('lvl').innerText=unlocked},800);</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Candy Blast 3D</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#12051f;
+  color:#fff;
+}
+
+body{
+  background:
+    radial-gradient(circle at 50% 15%,#8b32d0 0,#391078 40%,#0b0314 100%);
+}
+
+#app{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:relative;
+}
+
+/* TOP BAR */
+#top{
+  width:min(94vw,620px);
+  padding:14px 10px 5px;
+  display:flex;
+  gap:8px;
+}
+
+.stat{
+  flex:1;
+  text-align:center;
+  padding:8px;
+  border-radius:18px;
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.22),
+    rgba(255,255,255,.07)
+  );
+  border:2px solid rgba(255,255,255,.25);
+  box-shadow:
+    0 8px 20px #0007,
+    inset 0 1px #fff6;
+}
+
+.label{
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  opacity:.75;
+}
+
+.value{
+  font-size:21px;
+  font-weight:1000;
+  text-shadow:0 2px 5px #0008;
+}
+
+/* TITLE */
+
+#title{
+  font-size:clamp(30px,8vw,48px);
+  font-weight:1000;
+  letter-spacing:-2px;
+  margin-top:3px;
+  text-shadow:
+    0 4px 0 #80157d,
+    0 7px 14px #0009;
+}
+
+#title span{
+  color:#ffe34d;
+}
+
+#subtitle{
+  font-size:10px;
+  letter-spacing:3px;
+  font-weight:900;
+  opacity:.7;
+  margin-bottom:6px;
+}
+
+/* BOARD */
+
+#boardWrap{
+  width:min(94vw,600px);
+  aspect-ratio:1/1;
+  margin:auto 0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  perspective:1000px;
+}
+
+#board{
+  width:94%;
+  height:94%;
+  padding:9px;
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  gap:6px;
+
+  transform:rotateX(8deg);
+
+  border-radius:28px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffd2ff22,
+      #4a0b7933
+    );
+
+  border:3px solid #ffffff38;
+
+  box-shadow:
+    0 22px 45px #0009,
+    inset 0 2px #fff5,
+    0 0 50px #e335ff33;
+}
+
+/* CELLS */
+
+.cell{
+  position:relative;
+  border-radius:17px;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff20,
+      #00000020
+    );
+
+  box-shadow:
+    inset 0 2px 2px #fff5,
+    inset 0 -5px 8px #0006;
+
+  touch-action:none;
+}
+
+/* CANDY */
+
+.candy{
+  width:72%;
+  height:72%;
+
+  border-radius:
+    32% 32% 40% 40%;
+
+  position:relative;
+
+  box-shadow:
+    inset 9px 7px 0 #fff6,
+    inset -8px -11px 0 #0003,
+    0 7px 7px #0008;
+
+  transition:
+    transform .16s,
+    filter .16s;
+}
+
+.candy:before{
+  content:"";
+  position:absolute;
+
+  width:28%;
+  height:18%;
+
+  left:17%;
+  top:13%;
+
+  border-radius:50%;
+
+  background:#fff9;
+}
+
+.candy:after{
+  content:"";
+  position:absolute;
+  inset:7%;
+
+  border-radius:inherit;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fff2,
+      transparent 45%
+    );
+}
+
+/* CANDY COLORS */
+
+.c0{
+  background:linear-gradient(145deg,#ff5b89,#e51655);
+}
+
+.c1{
+  background:linear-gradient(145deg,#61d8ff,#1688ff);
+}
+
+.c2{
+  background:linear-gradient(145deg,#ffe96b,#ffad14);
+}
+
+.c3{
+  background:linear-gradient(145deg,#9aff72,#2dbd55);
+}
+
+.c4{
+  background:linear-gradient(145deg,#d987ff,#8b31d9);
+}
+
+.c5{
+  background:linear-gradient(145deg,#ff8c52,#f23d22);
+}
+
+/* SELECTED */
+
+.selected .candy{
+  transform:
+    scale(1.16)
+    translateY(-4px);
+
+  filter:brightness(1.25);
+
+  box-shadow:
+    0 0 18px #fff,
+    inset 9px 7px 0 #fff7,
+    inset -8px -11px 0 #0003;
+}
+
+/* MATCH */
+
+.matched .candy{
+  animation:pop .32s forwards;
+}
+
+@keyframes pop{
+
+  50%{
+    transform:scale(1.4);
+    filter:brightness(1.8);
+  }
+
+  100%{
+    transform:scale(.05);
+    opacity:0;
+  }
+}
+
+/* FALL */
+
+.falling{
+  animation:fall .28s ease-out;
+}
+
+@keyframes fall{
+
+  from{
+    transform:translateY(-130%);
+  }
+
+  to{
+    transform:translateY(0);
+  }
+
+}
+
+/* BOTTOM */
+
+#bottom{
+  width:min(94vw,620px);
+  padding:8px 10px 16px;
+
+  display:flex;
+  gap:9px;
+}
+
+button{
+  border:0;
+  color:#fff;
+
+  font-weight:1000;
+
+  border-radius:20px;
+
+  padding:13px 10px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ff68b3,
+      #d62479
+    );
+
+  box-shadow:
+    0 7px 0 #7c124d,
+    0 12px 22px #0007,
+    inset 0 1px #fff8;
+
+  font-size:13px;
+
+  flex:1;
+}
+
+button:active{
+  transform:translateY(5px);
+
+  box-shadow:
+    0 2px 0 #7c124d,
+    0 5px 10px #0007;
+}
+
+/* MESSAGE */
+
+#message{
+  position:absolute;
+
+  top:43%;
+  left:50%;
+
+  transform:
+    translate(-50%,-50%)
+    scale(.8);
+
+  font-size:34px;
+
+  font-weight:1000;
+
+  text-shadow:
+    0 4px 8px #000;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  z-index:20;
+
+  white-space:nowrap;
+}
+
+#message.show{
+  animation:message .75s ease-out;
+}
+
+@keyframes message{
+
+  0%{
+    opacity:0;
+    transform:
+      translate(-50%,-50%)
+      scale(.5);
+  }
+
+  20%{
+    opacity:1;
+    transform:
+      translate(-50%,-50%)
+      scale(1.15);
+  }
+
+  80%{
+    opacity:1;
+  }
+
+  100%{
+    opacity:0;
+    transform:
+      translate(-50%,-75%)
+      scale(1);
+  }
+}
+
+/* START SCREEN */
+
+#start{
+  position:absolute;
+  inset:0;
+
+  background:
+    radial-gradient(
+      circle,
+      #7f2bd0ee,
+      #17051fee 70%
+    );
+
+  display:flex;
+  flex-direction:column;
+
+  justify-content:center;
+  align-items:center;
+
+  z-index:50;
+}
+
+.logo{
+  font-size:
+    clamp(48px,14vw,90px);
+
+  font-weight:1000;
+
+  letter-spacing:-5px;
+
+  text-shadow:
+    0 7px 0 #7b1874,
+    0 12px 25px #000;
+}
+
+.logo b{
+  color:#ffe34d;
+}
+
+.tag{
+  margin:10px 0 26px;
+
+  letter-spacing:4px;
+
+  font-size:12px;
+
+  font-weight:900;
+
+  opacity:.8;
+}
+
+#play{
+  flex:none;
+
+  width:210px;
+
+  font-size:20px;
+
+  padding:17px 20px;
+}
+
+#hint{
+  font-size:10px;
+
+  margin-top:14px;
+
+  opacity:.65;
+
+  letter-spacing:1px;
+}
+
+/* FLOATING SPARKS */
+
+.spark{
+  position:absolute;
+
+  width:5px;
+  height:5px;
+
+  border-radius:50%;
+
+  background:#fff;
+
+  box-shadow:
+    0 0 12px #fff;
+
+  animation:
+    float 4s linear infinite;
+
+  opacity:.6;
+}
+
+@keyframes float{
+
+  from{
+    transform:
+      translateY(110vh)
+      scale(.5);
+  }
+
+  to{
+    transform:
+      translateY(-10vh)
+      scale(1.5);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<!-- START -->
+
+<div id="start">
+
+  <div class="logo">
+    CANDY <b>BLAST</b>
+  </div>
+
+  <div class="tag">
+    3D MATCH • POP • BLAST
+  </div>
+
+  <button id="play">
+    PLAY NOW
+  </button>
+
+  <div id="hint">
+    TAP TWO ADJACENT CANDIES
+  </div>
+
+</div>
+
+
+<!-- STATS -->
+
+<div id="top">
+
+  <div class="stat">
+    <div class="label">SCORE</div>
+    <div id="score" class="value">0</div>
+  </div>
+
+  <div class="stat">
+    <div class="label">LEVEL</div>
+    <div id="level" class="value">1</div>
+  </div>
+
+  <div class="stat">
+    <div class="label">MOVES</div>
+    <div id="moves" class="value">30</div>
+  </div>
+
+</div>
+
+
+<div id="title">
+  CANDY <span>BLAST</span>
+</div>
+
+<div id="subtitle">
+  SWEET COMBO CHALLENGE
+</div>
+
+
+<!-- GAME BOARD -->
+
+<div id="boardWrap">
+
+  <div id="board"></div>
+
+</div>
+
+
+<div id="message"></div>
+
+
+<!-- BUTTONS -->
+
+<div id="bottom">
+
+  <button id="shuffle">
+    SHUFFLE
+  </button>
+
+  <button id="sound">
+    🔊 SOUND ON
+  </button>
+
+  <button id="restart">
+    RESTART
+  </button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   CANDY BLAST GAME ENGINE
+========================= */
+
+const SIZE = 8;
+const TYPES = 6;
+
+let grid = [];
+
+let score = 0;
+let moves = 30;
+let level = 1;
+
+let selected = null;
+let busy = false;
+
+let soundOn = true;
+let audioCtx = null;
+
+
+/* =========================
+   AUDIO
+========================= */
+
+function initAudio(){
+
+  if(!audioCtx){
+
+    audioCtx =
+      new(
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+
+  }
+
+  if(audioCtx.state === "suspended"){
+    audioCtx.resume();
+  }
+
+}
+
+
+function tone(
+  frequency,
+  duration=.09,
+  type="sine",
+  volume=.05
+){
+
+  if(!soundOn) return;
+
+  initAudio();
+
+  const oscillator =
+    audioCtx.createOscillator();
+
+  const gain =
+    audioCtx.createGain();
+
+  oscillator.type = type;
+
+  oscillator.frequency.value =
+    frequency;
+
+  gain.gain.setValueAtTime(
+    volume,
+    audioCtx.currentTime
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    .001,
+    audioCtx.currentTime + duration
+  );
+
+  oscillator
+    .connect(gain)
+    .connect(audioCtx.destination);
+
+  oscillator.start();
+
+  oscillator.stop(
+    audioCtx.currentTime + duration
+  );
+
+}
+
+
+function burstSound(combo){
+
+  tone(
+    420 + combo * 55,
+    .08,
+    "triangle",
+    .055
+  );
+
+  setTimeout(()=>{
+
+    tone(
+      700 + combo * 80,
+      .11,
+      "sine",
+      .04
+    );
+
+  },45);
+
+}
+
+
+/* =========================
+   CREATE BOARD
+========================= */
+
+function createGrid(){
+
+  grid =
+    Array.from(
+      {length:SIZE},
+      ()=>Array(SIZE).fill(0)
+    );
+
+  for(let r=0;r<SIZE;r++){
+
+    for(let c=0;c<SIZE;c++){
+
+      do{
+
+        grid[r][c] =
+          Math.floor(
+            Math.random()*TYPES
+          );
+
+      }
+
+      while(
+
+        (
+          c>=2 &&
+          grid[r][c] === grid[r][c-1] &&
+          grid[r][c] === grid[r][c-2]
+        )
+
+        ||
+
+        (
+          r>=2 &&
+          grid[r][c] === grid[r-1][c] &&
+          grid[r][c] === grid[r-2][c]
+        )
+
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+  const board =
+    document.getElementById("board");
+
+  board.innerHTML = "";
+
+  for(let r=0;r<SIZE;r++){
+
+    for(let c=0;c<SIZE;c++){
+
+      const cell =
+        document.createElement("div");
+
+      cell.className = "cell";
+
+      cell.dataset.r = r;
+      cell.dataset.c = c;
+
+      const candy =
+        document.createElement("div");
+
+      candy.className =
+        "candy c" + grid[r][c];
+
+      cell.appendChild(candy);
+
+      if(
+        selected &&
+        selected.r === r &&
+        selected.c === c
+      ){
+
+        cell.classList.add("selected");
+
+      }
+
+      cell.addEventListener(
+        "pointerdown",
+        ()=>{
+          tapCandy(r,c);
+        }
+      );
+
+      board.appendChild(cell);
+
+    }
+
+  }
+
+}
+
+
+/* =========================
+   TAP CANDY
+========================= */
+
+function tapCandy(r,c){
+
+  if(
+    busy ||
+    moves <= 0
+  ) return;
+
+  initAudio();
+
+  tone(
+    260,
+    .04,
+    "square",
+    .025
+  );
+
+
+  if(!selected){
+
+    selected = {r,c};
+
+    render();
+
+    return;
+
+  }
+
+
+  const distance =
+    Math.abs(selected.r-r) +
+    Math.abs(selected.c-c);
+
+
+  if(distance !== 1){
+
+    selected = {r,c};
+
+    render();
+
+    return;
+
+  }
+
+
+  const first = selected;
+
+  swap(
+    first.r,
+    first.c,
+    r,
+    c
+  );
+
+  selected = null;
+
+  render();
+
+
+  const matches =
+    findMatches();
+
+
+  if(!matches.size){
+
+    setTimeout(()=>{
+
+      swap(
+        first.r,
+        first.c,
+        r,
+        c
+      );
+
+      render();
+
+    },180);
+
+    return;
+
+  }
+
+
+  moves--;
+
+  updateUI();
+
+  busy = true;
+
+  resolveMatches(matches);
+
+}
+
+
+/* =========================
+   SWAP
+========================= */
+
+function swap(
+  r1,c1,
+  r2,c2
+){
+
+  const temp =
+    grid[r1][c1];
+
+  grid[r1][c1] =
+    grid[r2][c2];
+
+  grid[r2][c2] =
+    temp;
+
+}
+
+
+/* =========================
+   FIND MATCHES
+========================= */
+
+function findMatches(){
+
+  const matches =
+    new Set();
+
+
+  /* HORIZONTAL */
+
+  for(let r=0;r<SIZE;r++){
+
+    let start = 0;
+
+    for(
+      let c=1;
+      c<=SIZE;
+      c++
+    ){
+
+      if(
+        c<SIZE &&
+        grid[r][c] ===
+        grid[r][start]
+      ){
+
+        continue;
+
+      }
+
+
+      if(c-start >= 3){
+
+        for(
+          let x=start;
+          x<c;
+          x++
+        ){
+
+          matches.add(
+            r+","+x
+          );
+
+        }
+
+      }
+
+      start = c;
+
+    }
+
+  }
+
+
+  /* VERTICAL */
+
+  for(let c=0;c<SIZE;c++){
+
+    let start = 0;
+
+    for(
+      let r=1;
+      r<=SIZE;
+      r++
+    ){
+
+      if(
+        r<SIZE &&
+        grid[r][c] ===
+        grid[start][c]
+      ){
+
+        continue;
+
+      }
+
+
+      if(r-start >= 3){
+
+        for(
+          let x=start;
+          x<r;
+          x++
+        ){
+
+          matches.add(
+            x+","+c
+          );
+
+        }
+
+      }
+
+      start = r;
+
+    }
+
+  }
+
+
+  return matches;
+
+}
+
+
+/* =========================
+   RESOLVE
+========================= */
+
+async function resolveMatches(
+  matches
+){
+
+  let combo = 0;
+
+
+  while(matches.size){
+
+    combo++;
+
+
+    score +=
+      matches.size *
+      10 *
+      combo;
+
+
+    burstSound(combo);
+
+
+    showMessage(
+      combo > 1
+      ? `COMBO x${combo}!`
+      : `+${matches.size*10}`
+    );
+
+
+    /* POP */
+
+    for(
+      const key of matches
+    ){
+
+      const [r,c] =
+        key
+        .split(",")
+        .map(Number);
+
+      const cell =
+        document.querySelector(
+          `.cell[data-r="${r}"][data-c="${c}"]`
+        );
+
+      if(cell){
+
+        cell.classList.add(
+          "matched"
+        );
+
+      }
+
+    }
+
+
+    await wait(260);
+
+
+    /* REMOVE */
+
+    for(
+      const key of matches
+    ){
+
+      const [r,c] =
+        key
+        .split(",")
+        .map(Number);
+
+      grid[r][c] = -1;
+
+    }
+
+
+    /* DROP */
+
+    for(let c=0;c<SIZE;c++){
+
+      let write = SIZE-1;
+
+
+      for(
+        let r=SIZE-1;
+        r>=0;
+        r--
+      ){
+
+        if(grid[r][c] !== -1){
+
+          grid[write][c] =
+            grid[r][c];
+
+          write--;
+
+        }
+
+      }
+
+
+      /* NEW CANDIES */
+
+      for(
+        let r=write;
+        r>=0;
+        r--
+      ){
+
+        grid[r][c] =
+          Math.floor(
+            Math.random()*TYPES
+          );
+
+      }
+
+    }
+
+
+    render();
+
+    await wait(100);
+
+
+    matches =
+      findMatches();
+
+  }
+
+
+  level =
+    Math.max(
+      1,
+      Math.floor(score/1000)+1
+    );
+
+
+  updateUI();
+
+  busy = false;
+
+
+  if(moves <= 0){
+
+    showMessage(
+      "OUT OF MOVES!"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function wait(ms){
+
+  return new Promise(
+    resolve =>
+      setTimeout(resolve,ms)
+  );
+
+}
+
+
+function showMessage(text){
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+  message.textContent = text;
+
+  message.classList.remove(
+    "show"
+  );
+
+  void message.offsetWidth;
+
+  message.classList.add(
+    "show"
+  );
+
+}
+
+
+function updateUI(){
+
+  document.getElementById(
+    "score"
+  ).textContent =
+    score.toLocaleString();
+
+
+  document.getElementById(
+    "moves"
+  ).textContent =
+    moves;
+
+
+  document.getElementById(
+    "level"
+  ).textContent =
+    level;
+
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+document
+.getElementById("play")
+.onclick = ()=>{
+
+  initAudio();
+
+  document
+    .getElementById("start")
+    .style.display = "none";
+
+  createGrid();
+
+  render();
+
+  updateUI();
+
+  tone(
+    520,
+    .12,
+    "sine",
+    .05
+  );
+
+  tone(
+    780,
+    .16,
+    "sine",
+    .04
+  );
+
+};
+
+
+document
+.getElementById("restart")
+.onclick = ()=>{
+
+  score = 0;
+  moves = 30;
+  level = 1;
+
+  selected = null;
+  busy = false;
+
+  createGrid();
+
+  render();
+
+  updateUI();
+
+};
+
+
+document
+.getElementById("shuffle")
+.onclick = ()=>{
+
+  if(busy) return;
+
+  createGrid();
+
+  render();
+
+  tone(
+    330,
+    .08,
+    "triangle",
+    .04
+  );
+
+};
+
+
+document
+.getElementById("sound")
+.onclick = ()=>{
+
+  soundOn = !soundOn;
+
+  document.getElementById(
+    "sound"
+  ).textContent =
+    soundOn
+    ? "🔊 SOUND ON"
+    : "🔇 SOUND OFF";
+
+  if(soundOn){
+
+    tone(
+      600,
+      .1
+    );
+
+  }
+
+};
+
+
+/* =========================
+   BACKGROUND SPARKLES
+========================= */
+
+for(let i=0;i<18;i++){
+
+  const spark =
+    document.createElement("div");
+
+  spark.className = "spark";
+
+  spark.style.left =
+    Math.random()*100 + "%";
+
+  spark.style.animationDelay =
+    Math.random()*4 + "s";
+
+  spark.style.animationDuration =
+    (3 + Math.random()*4) + "s";
+
+  document.body.appendChild(
+    spark
+  );
+
+}
+
+</script>
+
+</body>
+</html>
